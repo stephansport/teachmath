@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeachMath – Verirrt im Zahlengebirge</title>
+    <link rel="stylesheet" href="mountain.css">
+</head>
+<body>
+<div id="toast" class="toast"></div>
+
+<!-- START -->
+<div id="screen-start" class="screen active">
+    <div class="card center">
+        <div id="start-scene" class="scene"></div>
+        <h1>🏔️ Verirrt im Zahlengebirge</h1>
+        <p class="sub">Dein Gleitschirm ist mitten im Gebirge abgestürzt. Finde mit Köpfchen und Mathe den Weg zurück in die Zivilisation! Es gibt <b>drei verschiedene Wege</b> nach Hause.</p>
+        <div class="rules">❤️ 3 Leben · 🎒 Gegenstände sammeln · 💾 Spielstand wird automatisch gespeichert · 🗺️ Karte zeigt, wo du schon warst</div>
+        <input type="text" id="player-name" placeholder="Dein Name, Abenteurer!" maxlength="20">
+        <button id="btn-new" class="btn primary">🧗 Neues Abenteuer</button>
+        <button id="btn-continue" class="btn gold hidden">▶️ Weiterspielen</button>
+        <div id="start-exits" class="exits"></div>
+        <div id="hs-list" class="hs"></div>
+        <div class="links"><a href="index.html">🏠 Zum Menü</a> · <a href="settings.html">⚙️ Einstellungen</a></div>
+    </div>
+</div>
+
+<!-- SPIEL -->
+<div id="screen-game" class="screen">
+    <div class="hud">
+        <span id="hud-name" class="hud-name"></span>
+        <span id="hud-lives"></span>
+        <span class="hud-score">⭐ <span id="hud-score">0</span></span>
+    </div>
+    <div class="toolbar">
+        <button id="btn-map" class="btn small">🗺️ Karte</button>
+        <button id="btn-save" class="btn small">💾 Speichern</button>
+        <button id="btn-to-menu" class="btn small">🏠 Menü</button>
+    </div>
+    <div class="card">
+        <div id="scene" class="scene"></div>
+        <h2 id="loc-title"></h2>
+        <p id="loc-text" class="loc-text"></p>
+        <div id="msg" class="msg hidden"></div>
+
+        <div id="challenge" class="challenge hidden">
+            <div class="ch-head">🧮 Rätsel</div>
+            <div id="ch-text" class="ch-text"></div>
+            <div class="ch-row">
+                <input type="text" inputmode="decimal" id="ch-input" placeholder="Deine Antwort" autocomplete="off">
+                <span id="ch-unit" class="ch-unit"></span>
+            </div>
+            <div id="ch-hint" class="ch-hint"></div>
+            <div id="ch-feedback" class="feedback hidden"></div>
+            <div class="ch-buttons">
+                <button id="btn-check" class="btn primary">✓ Prüfen</button>
+                <button id="btn-hint" class="btn hint">💡 Tipp</button>
+                <button id="btn-cancel" class="btn">↩️ Lieber nicht</button>
+            </div>
+        </div>
+
+        <div id="actions" class="actions"></div>
+    </div>
+    <div class="card">
+        <h3>🎒 Rucksack</h3>
+        <div id="inventory" class="inventory"></div>
+    </div>
+</div>
+
+<!-- KARTE -->
+<div id="map-overlay" class="overlay hidden">
+    <div class="card map-card">
+        <h2>🗺️ Deine Karte</h2>
+        <p class="sub">📍 = hier bist du · ❓ = noch nicht besucht</p>
+        <div id="map-grid" class="map-grid"></div>
+        <button id="btn-close-map" class="btn primary">Schließen</button>
+    </div>
+</div>
+
+<!-- GEWONNEN -->
+<div id="screen-win" class="screen">
+    <div class="card center win">
+        <div id="win-scene" class="scene"></div>
+        <h1>🎉 Gerettet!</h1>
+        <h2 id="win-title"></h2>
+        <p id="win-text" class="loc-text"></p>
+        <p class="big">⭐ <span id="win-score">0</span> Punkte</p>
+        <div id="win-exits" class="exits"></div>
+        <p class="sub">Schaffst du es auch über einen anderen Weg nach Hause?</p>
+        <button id="btn-win-again" class="btn primary">🔄 Neues Abenteuer</button>
+        <button id="btn-win-menu" class="btn">🏠 Zum Menü</button>
+    </div>
+</div>
+
+<!-- GAME OVER -->
+<div id="screen-over" class="screen">
+    <div class="card center">
+        <div class="huge">🥶</div>
+        <h1>Keine Leben mehr!</h1>
+        <p id="over-text" class="sub"></p>
+        <p class="big">⭐ <span id="over-score">0</span> Punkte</p>
+        <button id="btn-over-again" class="btn primary">🔄 Nochmal versuchen</button>
+        <button id="btn-over-menu" class="btn">🏠 Zum Menü</button>
+    </div>
+</div>
+
+<script src="mountain-data.js"></script>
+<script src="mountain.js"></script>
+</body>
+</html>
