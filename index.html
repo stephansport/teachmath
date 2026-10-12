@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeachMath - Mathe spielerisch lernen!</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>🎓 TeachMath</h1>
+            <div class="user-stats">
+                <div class="stat">
+                    <span class="icon">⭐</span>
+                    <span id="points">0</span>
+                </div>
+                <div class="stat">
+                    <span class="icon">🏆</span>
+                    <span id="level">1</span>
+                </div>
+                <div class="stat">
+                    <span class="icon">🔥</span>
+                    <span id="streak">0</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav id="nav" class="hidden">
+            <button class="nav-btn active" data-view="dashboard">Dashboard</button>
+            <button class="nav-btn" data-view="training">Trainieren</button>
+            <button class="nav-btn" data-view="achievements">Erfolge</button>
+        <button class="nav-btn" id="settings-btn" onclick="window.location.href='settings.html'">⚙️ Einstellungen</button>
+        </nav>
+
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="screen">
+            <div class="welcome-card">
+                <h2>Willkommen bei TeachMath! 🎉</h2>
+                <p>Wie sollen wir dich nennen?</p>
+                <input type="text" id="username-input" placeholder="Dein Name" maxlength="20">
+                <button id="start-btn" class="btn-primary">Los geht's!</button>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="screen hidden">
+            <div class="card">
+                <h2>Hallo, <span id="username-display"></span>! 👋</h2>
+                <p class="subtitle">Bereit für deine tägliche Challenge?</p>
+                
+                <div class="progress-overview">
+                    <div class="progress-item">
+                        <div class="progress-label">Tagesfortschritt</div>
+                        <div class="progress-bar">
+                            <div id="daily-progress" class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <div class="progress-text"><span id="daily-done">0</span>/5 Aufgaben</div>
+                    </div>
+                    
+                    <div class="progress-item">
+                        <div class="progress-label">Nächstes Level</div>
+                        <div class="progress-bar">
+                            <div id="level-progress" class="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <div class="progress-text"><span id="points-to-level">100</span> Punkte</div>
+                    </div>
+                </div>
+
+                <button class="btn-primary btn-large" id="start-challenge">🎯 Tägliche Challenge starten</button>
+            </div>
+
+            <div class="topics-grid">
+                <div class="topic-card" data-topic="addition">
+                    <div class="topic-icon">➕</div>
+                    <h3>Addition & Subtraktion</h3>
+                    <p>Grundrechenarten bis 1000</p>
+                    <div class="topic-progress">Stufe 1</div>
+                </div>
+                
+                <div class="topic-card" data-topic="multiplication">
+                    <div class="topic-icon">✖️</div>
+                    <h3>Multiplikation & Division</h3>
+                    <p>Einmaleins und mehr</p>
+                    <div class="topic-progress">Stufe 1</div>
+                </div>
+                
+                <div class="topic-card" data-topic="advanced">
+                    <div class="topic-icon">🧠</div>
+                    <h3>Rechenregeln</h3>
+                    <p>Punkt vor Strich, Klammern</p>
+                    <div class="topic-progress">Stufe 2</div>
+                </div>
+                
+                <div class="topic-card" data-topic="conversions">
+                    <div class="topic-icon">📍</div>
+                    <h3>Größen umrechnen</h3>
+                    <p>Längen, Gewicht, Zeit</p>
+                    <div class="topic-progress">Stufe 1</div>
+                </div>
+                
+                <div class="topic-card" data-topic="geometry">
+                    <div class="topic-icon">🔺</div>
+                    <h3>Geometrie</h3>
+                    <p>Umfang, Fläche, Volumen</p>
+                    <div class="topic-progress">Stufe 2</div>
+                </div>
+                
+                <div class="topic-card" data-topic="wordProblems">
+                    <div class="topic-icon">📖</div>
+                    <h3>Sachaufgaben</h3>
+                    <p>Textaufgaben lösen</p>
+                    <div class="topic-progress">Stufe 2</div>
+                </div>
+                
+                <div class="topic-card" data-topic="challenge" style="border: 3px solid gold;">
+                    <div class="topic-icon">🏆</div>
+                    <h3>Knobelaufgaben</h3>
+                    <p>Überschlag, Fehler finden, Platzhalter</p>
+                    <div class="topic-progress" style="background: gold; color: #000;">Herausforderung</div>
+                </div>
+                
+                <div class="topic-card" id="adventure-card" style="border: 3px solid #f59e0b; background: linear-gradient(135deg, #1e293b 0%, #0f2744 100%); cursor: pointer;">
+                    <div class="topic-icon">🏴‍☠️</div>
+                    <h3 style="color: #fde68a;">Schatz-Abenteuer</h3>
+                    <p style="color: #93c5fd;">Löse Mathe-Rätsel und finde den Schatz!</p>
+                    <div class="topic-progress" style="background: #f59e0b; color: #000;">✨ Neu!</div>
+                </div>
+                
+                <div class="topic-card" id="mountain-card" style="border: 3px solid #22c55e; background: linear-gradient(135deg, #1e293b 0%, #1e3a2f 100%); cursor: pointer;">
+                    <div class="topic-icon">🏔️</div>
+                    <h3 style="color: #86efac;">Zahlengebirge</h3>
+                    <p style="color: #cbd5e1;">Verirrt im Gebirge – finde mit Mathe den Weg nach Hause!</p>
+                    <div class="topic-progress" style="background: #22c55e; color: #000;">✨ Neu!</div>
+                </div>
+
+                <div class="topic-card" id="space-card" style="border: 3px solid #818cf8; background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%); cursor: pointer;">
+                    <div class="topic-icon">🚀</div>
+                    <h3 style="color: #c7d2fe;">Weltraum-Abenteuer</h3>
+                    <p style="color: #94a3b8;">Verirrt im All – löse Mathe-Rätsel und finde den Weg zur Erde!</p>
+                    <div class="topic-progress" style="background: #818cf8; color: #fff;">✨ Neu!</div>
+                </div>
+
+                <div class="topic-card" id="museum-card" style="border: 3px solid #84cc16; background: linear-gradient(135deg, #1c1427 0%, #2a1f14 100%); cursor: pointer;">
+                    <div class="topic-icon">🏛️</div>
+                    <h3 style="color: #d9f99d;">Nachts im Museum</h3>
+                    <p style="color: #cbd5e1;">Das verschwundene Morgen – finde das Zeitrad, bevor die Nacht ewig dauert!</p>
+                    <div class="topic-progress" style="background: #84cc16; color: #1c1917;">✨ Neu!</div>
+                </div>
+
+                <div class="topic-card" id="jungle-card" style="border: 3px solid #84cc16; background: linear-gradient(135deg, #052e16 0%, #14532d 100%); cursor: pointer;">
+                    <div class="topic-icon">🌿</div>
+                    <h3 style="color: #bef264;">Zahlendschungel</h3>
+                    <p style="color: #d9f99d;">Bei der Klassenfahrt verloren – finde mit Mathe den Weg zurück!</p>
+                    <div class="topic-progress" style="background: #84cc16; color: #14532d;">✨ Neu!</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Training Screen -->
+        <div id="training" class="screen hidden">
+            <div class="card exercise-card">
+                <div class="exercise-header">
+                    <div class="exercise-info">
+                        <span class="exercise-topic" id="current-topic">Addition</span>
+                        <span class="exercise-number">Aufgabe <span id="task-number">1</span>/5</span>
+                    </div>
+                    <button id="quit-btn" class="btn-small">❌ Beenden</button>
+                </div>
+
+                <div class="exercise-progress">
+                    <div id="exercise-progress-bar" class="progress-fill" style="width: 20%"></div>
+                </div>
+
+                <div class="question-container">
+                    <h2 id="question" class="question">Wird geladen...</h2>
+                    
+                    <div id="answer-input-container" class="answer-container">
+                        <input type="number" id="answer-input" class="answer-input" placeholder="Deine Antwort">
+                    </div>
+                    
+                    <div id="answer-choices" class="answer-choices hidden">
+                        <!-- Multiple choice buttons will be inserted here -->
+                    </div>
+                </div>
+
+                <div id="feedback" class="feedback hidden"></div>
+
+                <div class="button-group">
+                    <button id="check-btn" class="btn-primary">Prüfen</button>
+                    <button id="next-btn" class="btn-primary hidden">Weiter</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Achievements Screen -->
+        <div id="achievements" class="screen hidden">
+            <div class="card">
+                <h2>🏆 Deine Erfolge</h2>
+                
+                <div class="achievements-grid" id="achievements-grid">
+                    <!-- Achievements will be dynamically inserted -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Modal -->
+        <div id="success-modal" class="modal hidden">
+            <div class="modal-content">
+                <h2 id="modal-title">🎉 Geschafft!</h2>
+                <div id="modal-body"></div>
+                <button id="modal-close" class="btn-primary">Weiter</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // Adventure-Karte verlinken
+        document.getElementById('adventure-card').addEventListener('click', () => {
+            window.location.href = 'adventure.html';
+        });
+        document.getElementById('mountain-card').addEventListener('click', () => {
+            window.location.href = 'mountain.html';
+        });
+        document.getElementById('space-card').addEventListener('click', () => {
+            window.location.href = 'space.html';
+        });
+        document.getElementById('museum-card').addEventListener('click', () => {
+            window.location.href = 'museum.html';
+        });
+        document.getElementById('jungle-card').addEventListener('click', () => {
+            window.location.href = 'jungle.html';
+        });
+    </script>
+</body>
+</html>
