@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeachMath – Nachts im Museum</title>
+    <link rel="stylesheet" href="museum.css">
+</head>
+<body>
+
+<!-- ====== START-SCREEN ====== -->
+<div class="screen active" id="screen-start">
+    <div class="start-card">
+        <div class="start-scene" id="start-scene"></div>
+        <div class="start-content">
+            <h1>🏛️ Nachts im Museum</h1>
+            <p class="sub" style="text-align:center"><b>Das verschwundene Morgen</b></p>
+            <p class="sub">Nach der Schulführung bist du im Museum eingeschlossen. Die Ausstellungsstücke erwachen zum Leben – und die große Uhr bleibt stehen! Finde mit dem Roboter <b>Pixel</b> das <b>Zeitrad</b> im Dachatelier, bevor die Nacht ewig dauert.</p>
+            <p class="sub">❤️ 3 Leben · ✅ Jede richtige Lösung: +10 Punkte (mit Tipp +5) · 🔥 3 richtige in Folge: Bonus · ❌ Falsche Antwort kostet ein Leben · 🏅 Sammle alle Museumsstempel · 🗺️ Drei Wege führen zum Ziel</p>
+            <div class="name-input">
+                <label for="player-name">Dein Name:</label>
+                <input type="text" id="player-name" placeholder="z.B. Alex" maxlength="20" autocomplete="off">
+            </div>
+            <button class="btn btn-primary" id="btn-new">🎮 Neues Spiel starten</button>
+            <button class="btn hidden" id="btn-continue">▶️ Weiterspielen</button>
+        </div>
+    </div>
+    <div class="hs-box start-exits" id="start-exits"></div>
+    <div class="hs-box" id="hs-list"></div>
+    <a class="back-link" href="index.html">← Zurück zur Startseite</a>
+</div>
+
+<!-- ====== GAME-SCREEN ====== -->
+<div class="screen" id="screen-game">
+    <header class="hud">
+        <div class="hud-left">
+            <span id="hud-name">🧒 Spieler</span>
+            <span id="hud-lives">❤️❤️❤️</span>
+            <span title="Museumsstempel">🏅 <b id="hud-stamps">0/5</b></span>
+        </div>
+        <div class="hud-right">
+            <span>⭐ <b id="hud-score">0</b></span>
+            <button class="btn btn-sm" id="btn-save" title="Speichern">💾</button>
+            <button class="btn btn-sm" id="btn-map" title="Museumsplan">🗺️</button>
+            <button class="btn btn-sm btn-ghost" id="btn-to-menu" title="Menü">🏠</button>
+        </div>
+    </header>
+
+    <main class="game-main">
+        <section class="scene-wrap"><div class="scene" id="scene"></div></section>
+        <div class="loc-title" id="loc-title">📍 Ort</div>
+        <div class="loc-text" id="loc-text"></div>
+        <div class="pixel-badge hidden" id="pixel-tip"></div>
+        <div class="msg hidden" id="msg"></div>
+
+        <section class="challenge hidden" id="challenge">
+            <h3>🧮 Mathe-Rätsel</h3>
+            <div class="ch-text" id="ch-text"></div>
+            <div id="ch-work">
+            <div class="ch-input-row">
+                <input type="text" id="ch-input" placeholder="Deine Antwort" autocomplete="off" inputmode="numeric">
+                <span class="ch-unit" id="ch-unit"></span>
+            </div>
+            <div class="ch-hint" id="ch-hint"></div>
+            <div class="feedback hidden" id="ch-feedback"></div>
+            <div class="ch-btn-row">
+                <button class="btn btn-primary" id="btn-check">✔️ Prüfen</button>
+                <button class="btn btn-gold" id="btn-hint">💡 Tipp</button>
+                <button class="btn btn-ghost" id="btn-cancel">Abbrechen</button>
+            </div>
+            </div>
+            <div class="ch-success hidden" id="ch-success">
+                <div id="ch-success-text"></div>
+                <button class="btn btn-primary" id="btn-ch-continue">Weiter ➡️</button>
+            </div>
+        </section>
+
+        <section class="actions" id="actions"></section>
+        <footer class="inventory" id="inventory"></footer>
+    </main>
+</div>
+
+<!-- ====== WIN-SCREEN ====== -->
+<div class="screen" id="screen-win">
+    <div class="end-card">
+        <div class="end-scene" id="win-scene"></div>
+        <h1 id="win-title">🌅 Geschafft!</h1>
+        <div class="end-text" id="win-text"></div>
+        <div class="end-score">⭐ <b id="win-score">0</b> Punkte</div>
+        <div class="exits-found" id="win-exits"></div>
+        <button class="btn btn-primary" id="btn-win-again">🔄 Anderen Weg ausprobieren</button>
+        <button class="btn" id="btn-win-menu">🏠 Zur Startseite</button>
+    </div>
+</div>
+
+<!-- ====== GAME-OVER-SCREEN ====== -->
+<div class="screen" id="screen-over">
+    <div class="end-card">
+        <div class="end-scene" id="over-scene"></div>
+        <h1>😴 Spiel vorbei</h1>
+        <div class="end-text" id="over-text"></div>
+        <div class="end-score">⭐ <b id="over-score">0</b> Punkte erreicht</div>
+        <button class="btn btn-primary" id="btn-over-again">🔄 Nochmal versuchen</button>
+        <button class="btn" id="btn-over-menu">🏠 Zur Startseite</button>
+    </div>
+</div>
+
+<!-- ====== MUSEUMSPLAN ====== -->
+<div class="map-overlay hidden" id="map-overlay">
+    <div class="map-card">
+        <div class="map-header">
+            <h3>🗺️ Museumsplan</h3>
+            <button class="btn btn-sm btn-ghost" id="btn-close-map">✖</button>
+        </div>
+        <div class="map-grid" id="map-grid"></div>
+        <div class="map-legend">
+            <span class="chip visited">✅ Besucht</span>
+            <span class="chip unknown">❓ Unbekannt</span>
+            <span class="chip here">📍 Du bist hier</span>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="museum-data.js"></script>
+<script src="museum-scenes.js"></script>
+<script src="museum.js"></script>
+</body>
+</html>
