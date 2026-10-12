@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>TeachMath - Test der Knobelaufgaben</title>
+</head>
+<body>
+    <h1>Test: Knobelaufgaben-Generatoren</h1>
+    <div id="output"></div>
+    
+    <script src="app.js"></script>
+    <script>
+        const output = document.getElementById('output');
+        
+        function testGenerator(name) {
+            try {
+                const exercise = exerciseGenerators[name]();
+                return `✅ ${name}: ${exercise.question} (Antwort: ${exercise.answer})`;
+            } catch (e) {
+                return `❌ ${name}: FEHLER - ${e.message}`;
+            }
+        }
+        
+        const testTypes = ['estimation', 'numberSequence', 'findError', 'placeholder', 'complexWordProblem'];
+        
+        output.innerHTML = '<h2>Ergebnisse:</h2>';
+        testTypes.forEach(type => {
+            const result = testGenerator(type);
+            output.innerHTML += `<p>${result}</p>`;
+        });
+        
+        // Test challenge topic
+        output.innerHTML += '<h2>Test: Challenge-Set (5 Aufgaben)</h2>';
+        try {
+            const exercises = generateExerciseSet('challenge', 5);
+            exercises.forEach((ex, i) => {
+                output.innerHTML += `<p>${i+1}. ${ex.topic}: ${ex.question}</p>`;
+            });
+        } catch (e) {
+            output.innerHTML += `<p>❌ FEHLER: ${e.message}</p>`;
+        }
+    </script>
+</body>
+</html>
