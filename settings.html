@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeachMath – Einstellungen</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .settings-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .settings-header {
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px 28px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .settings-header h1 { font-size: 1.6rem; color: #6366f1; }
+        .settings-header a {
+            margin-left: auto;
+            text-decoration: none;
+            font-size: 0.95rem;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+            padding: 8px 14px;
+            border-radius: 8px;
+        }
+        .settings-header a:hover { background: #f1f5f9; }
+
+        .section {
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px 28px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .section h2 {
+            font-size: 1.1rem;
+            color: #1e293b;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .setting-row:last-child { border-bottom: none; }
+        .setting-info h3 { font-size: 1rem; color: #1e293b; margin-bottom: 3px; }
+        .setting-info p  { font-size: 0.85rem; color: #64748b; }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+        .btn-danger:hover { background: #dc2626; }
+        .btn-danger:disabled { background: #94a3b8; cursor: not-allowed; }
+
+        .btn-warn {
+            background: #f59e0b;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background 0.2s;
+        }
+        .btn-warn:hover { background: #d97706; }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: #1e293b;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            transition: transform 0.3s;
+            z-index: 999;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 4px;
+        }
+        .stat-box {
+            background: #f8fafc;
+            border-radius: 10px;
+            padding: 14px;
+            text-align: center;
+        }
+        .stat-box .val { font-size: 1.8rem; font-weight: 700; color: #6366f1; }
+        .stat-box .lbl { font-size: 0.8rem; color: #64748b; margin-top: 2px; }
+
+        .hs-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+        .hs-table th { text-align: left; color: #64748b; font-size: 0.8rem; padding: 6px 4px; border-bottom: 1px solid #e2e8f0; }
+        .hs-table td { padding: 8px 4px; font-size: 0.95rem; border-bottom: 1px solid #f1f5f9; }
+        .hs-table tr:first-child td { font-weight: 700; color: #f59e0b; }
+        .empty-msg { color: #94a3b8; font-size: 0.9rem; font-style: italic; }
+    </style>
+</head>
+<body>
+<div class="settings-container">
+
+    <!-- Header -->
+    <div class="settings-header">
+        <span style="font-size:1.8rem">⚙️</span>
+        <h1>Einstellungen</h1>
+        <a href="index.html">← Zurück</a>
+    </div>
+
+    <!-- Statistiken -->
+    <div class="section">
+        <h2>📊 Statistiken</h2>
+        <div class="stat-grid" id="stats-grid">
+            <div class="stat-box"><div class="val" id="stat-points">0</div><div class="lbl">Punkte</div></div>
+            <div class="stat-box"><div class="val" id="stat-level">1</div><div class="lbl">Level</div></div>
+            <div class="stat-box"><div class="val" id="stat-solved">0</div><div class="lbl">Aufgaben gelöst</div></div>
+            <div class="stat-box"><div class="val" id="stat-streak">0</div><div class="lbl">Streak (Tage)</div></div>
+        </div>
+    </div>
+
+    <!-- Bestenliste Matheaufgaben -->
+    <div class="section">
+        <h2>🏆 Bestenliste – Matheaufgaben</h2>
+        <div id="hs-math-content"></div>
+        <div class="setting-row" style="margin-top:16px; border-top: 1px solid #f1f5f9; padding-top: 16px;">
+            <div class="setting-info">
+                <h3>Bestenliste löschen</h3>
+                <p>Entfernt alle gespeicherten Highscores</p>
+            </div>
+            <button class="btn-danger" id="btn-clear-math-hs">🗑️ Löschen</button>
+        </div>
+    </div>
+
+    <!-- Bestenliste Adventure -->
+    <div class="section">
+        <h2>🏴‍☠️ Bestenliste – Schatz-Abenteuer</h2>
+        <div id="hs-adventure-content"></div>
+        <div class="setting-row" style="margin-top:16px; border-top: 1px solid #f1f5f9; padding-top: 16px;">
+            <div class="setting-info">
+                <h3>Bestenliste löschen</h3>
+                <p>Entfernt alle Adventure-Highscores</p>
+            </div>
+            <button class="btn-danger" id="btn-clear-adv-hs">🗑️ Löschen</button>
+        </div>
+    </div>
+
+    <!-- Bestenliste Gebirge -->
+    <div class="section">
+        <h2>🏔️ Bestenliste – Zahlengebirge</h2>
+        <div id="hs-mountain-content"></div>
+        <div class="setting-row" style="margin-top:16px; border-top: 1px solid #f1f5f9; padding-top: 16px;">
+            <div class="setting-info">
+                <h3>Bestenliste löschen</h3>
+                <p>Entfernt alle Gebirgs-Highscores</p>
+            </div>
+            <button class="btn-danger" id="btn-clear-mtn-hs">🗑️ Löschen</button>
+        </div>
+        <div class="setting-row">
+            <div class="setting-info">
+                <h3>Spielstand & entdeckte Wege löschen</h3>
+                <p>Gespeichertes Spiel und die gefundenen Ausgänge zurücksetzen</p>
+            </div>
+            <button class="btn-warn" id="btn-clear-mtn-save">↩️ Zurücksetzen</button>
+        </div>
+    </div>
+
+    <!-- Fortschritt zurücksetzen -->
+    <div class="section">
+        <h2>🔄 Fortschritt zurücksetzen</h2>
+        <div class="setting-row">
+            <div class="setting-info">
+                <h3>Tagesfortschritt zurücksetzen</h3>
+                <p>Nur der heutige Tagesfortschritt wird gelöscht</p>
+            </div>
+            <button class="btn-warn" id="btn-reset-daily">↩️ Zurücksetzen</button>
+        </div>
+        <div class="setting-row">
+            <div class="setting-info">
+                <h3>Alles zurücksetzen</h3>
+                <p>Löscht Punkte, Level, Streak und alle Fortschritte</p>
+            </div>
+            <button class="btn-danger" id="btn-reset-all">⚠️ Alles löschen</button>
+        </div>
+    </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    function confirm2(msg) {
+        return confirm(msg);
+    }
+
+    // Statistiken laden
+    function loadStats() {
+        const raw = localStorage.getItem('teachmath_state');
+        if (raw) {
+            const s = JSON.parse(raw);
+            document.getElementById('stat-points').textContent = s.points || 0;
+            document.getElementById('stat-level').textContent = s.level || 1;
+            document.getElementById('stat-solved').textContent = s.totalSolved || 0;
+            document.getElementById('stat-streak').textContent = s.streak || 0;
+        }
+    }
+
+    // Bestenlisten rendern
+    function renderHsMath() {
+        // TeachMath hat aktuell keine persistente Highscore-Liste; Platzhalter
+        const container = document.getElementById('hs-math-content');
+        const raw = localStorage.getItem('teachmath_highscores');
+        if (!raw) { container.innerHTML = '<p class="empty-msg">Noch keine Einträge.</p>'; return; }
+        const hs = JSON.parse(raw);
+        if (!hs.length) { container.innerHTML = '<p class="empty-msg">Noch keine Einträge.</p>'; return; }
+        container.innerHTML = '<table class="hs-table"><tr><th>#</th><th>Name</th><th>Punkte</th><th>Datum</th></tr>' +
+            hs.map((e, i) => `<tr><td>${i+1}</td><td>${e.name}</td><td>⭐ ${e.score}</td><td>${e.date||''}</td></tr>`).join('') +
+            '</table>';
+    }
+
+    function renderHsAdventure() {
+        const container = document.getElementById('hs-adventure-content');
+        const raw = localStorage.getItem('adventure_hs');
+        if (!raw) { container.innerHTML = '<p class="empty-msg">Noch keine Einträge.</p>'; return; }
+        const hs = JSON.parse(raw);
+        if (!hs.length) { container.innerHTML = '<p class="empty-msg">Noch keine Einträge.</p>'; return; }
+        container.innerHTML = '<table class="hs-table"><tr><th>#</th><th>Name</th><th>Punkte</th><th>Datum</th></tr>' +
+            hs.map((e, i) => `<tr><td>${i+1}</td><td>${e.name}</td><td>⭐ ${e.score}</td><td>${e.date||''}</td></tr>`).join('') +
+            '</table>';
+    }
+
+    // Buttons
+    document.getElementById('btn-clear-math-hs').addEventListener('click', () => {
+        if (!confirm2('Mathe-Bestenliste wirklich löschen?')) return;
+        localStorage.removeItem('teachmath_highscores');
+        renderHsMath();
+        showToast('✅ Mathe-Bestenliste gelöscht');
+    });
+
+    document.getElementById('btn-clear-adv-hs').addEventListener('click', () => {
+        if (!confirm2('Adventure-Bestenliste wirklich löschen?')) return;
+        localStorage.removeItem('adventure_hs');
+        renderHsAdventure();
+        showToast('✅ Adventure-Bestenliste gelöscht');
+    });
+
+    document.getElementById('btn-reset-daily').addEventListener('click', () => {
+        if (!confirm2('Tagesfortschritt zurücksetzen?')) return;
+        const raw = localStorage.getItem('teachmath_state');
+        if (raw) {
+            const s = JSON.parse(raw);
+            s.dailyProgress = 0;
+            localStorage.setItem('teachmath_state', JSON.stringify(s));
+            loadStats();
+        }
+        showToast('✅ Tagesfortschritt zurückgesetzt');
+    });
+
+    document.getElementById('btn-reset-all').addEventListener('click', () => {
+        if (!confirm2('Wirklich ALLES löschen? Punkte, Level und Streak gehen verloren!')) return;
+        if (!confirm2('Bist du sicher? Diese Aktion kann nicht rückgängig gemacht werden.')) return;
+        localStorage.removeItem('teachmath_state');
+        localStorage.removeItem('teachmath_highscores');
+        localStorage.removeItem('adventure_hs');
+        localStorage.removeItem('mountain_hs');
+        localStorage.removeItem('mountain_save');
+        localStorage.removeItem('mountain_exits');
+        localStorage.removeItem('lastActive');
+        loadStats();
+        renderHsMath();
+        renderHsAdventure();
+        showToast('✅ Alles zurückgesetzt');
+    });
+
+    // Gebirgs-Abenteuer
+    function escHtml(t) { return String(t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;" }[c]; }); }
+    function renderHsMountain() {
+        const container = document.getElementById('hs-mountain-content');
+        let hs = [];
+        try { hs = JSON.parse(localStorage.getItem('mountain_hs')) || []; } catch (e) { hs = []; }
+        if (!hs.length) { container.innerHTML = '<p class="empty-msg">Noch keine Einträge.</p>'; return; }
+        container.innerHTML = '<table class="hs-table"><tr><th>#</th><th>Name</th><th>Punkte</th><th>Ausgang</th></tr>' +
+            hs.map(function (e, i) { return '<tr><td>' + (i + 1) + '</td><td>' + escHtml(e.name) + '</td><td>⭐ ' + e.score + '</td><td>' + escHtml(e.goal || '') + '</td></tr>'; }).join('') +
+            '</table>';
+    }
+    document.getElementById('btn-clear-mtn-hs').addEventListener('click', () => {
+        if (!confirm2('Gebirgs-Bestenliste wirklich löschen?')) return;
+        localStorage.removeItem('mountain_hs');
+        renderHsMountain();
+        showToast('✅ Gebirgs-Bestenliste gelöscht');
+    });
+    document.getElementById('btn-clear-mtn-save').addEventListener('click', () => {
+        if (!confirm2('Gespeichertes Gebirgs-Spiel und entdeckte Wege löschen?')) return;
+        localStorage.removeItem('mountain_save');
+        localStorage.removeItem('mountain_exits');
+        showToast('✅ Spielstand zurückgesetzt');
+    });
+
+    // Init
+    loadStats();
+    renderHsMath();
+    renderHsAdventure();
+    renderHsMountain();
+</script>
+</body>
+</html>
