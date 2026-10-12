@@ -69,6 +69,35 @@
                     </div>
                 </div>
 
+                <div class="goal-panel">
+                    <div class="goal-header">
+                        <h3>📚 Lernziel</h3>
+                        <span id="goal-badge" class="goal-badge">Im Plan</span>
+                    </div>
+                    <div class="goal-controls">
+                        <label for="goal-select">Wochenziel</label>
+                        <select id="goal-select">
+                            <option value="10">10 Aufgaben</option>
+                            <option value="25">25 Aufgaben</option>
+                            <option value="40">40 Aufgaben</option>
+                            <option value="60">60 Aufgaben</option>
+                        </select>
+                    </div>
+                    <div class="goal-bar">
+                        <div id="goal-progress" class="goal-progress-fill" style="width: 0%"></div>
+                    </div>
+                    <div class="goal-text"><span id="goal-progress-text">0/10</span> Aufgaben</div>
+
+                    <div class="difficulty-picker">
+                        <span class="difficulty-label">Schwierigkeitsgrad</span>
+                        <div class="difficulty-buttons">
+                            <button type="button" class="difficulty-btn" data-difficulty="leicht">Leicht</button>
+                            <button type="button" class="difficulty-btn active" data-difficulty="mittel">Mittel</button>
+                            <button type="button" class="difficulty-btn" data-difficulty="schwer">Schwer</button>
+                        </div>
+                    </div>
+                </div>
+
                 <button class="btn-primary btn-large" id="start-challenge">🎯 Tägliche Challenge starten</button>
             </div>
 
@@ -155,6 +184,13 @@
                     <h3 style="color: #bef264;">Zahlendschungel</h3>
                     <p style="color: #d9f99d;">Bei der Klassenfahrt verloren – finde mit Mathe den Weg zurück!</p>
                     <div class="topic-progress" style="background: #84cc16; color: #14532d;">✨ Neu!</div>
+                </div>
+
+                <div class="topic-card" data-topic="boss" style="border: 3px solid #f43f5e; background: linear-gradient(135deg, #1f2937 0%, #3f1d2e 100%); cursor: pointer;">
+                    <div class="topic-icon">👑</div>
+                    <h3 style="color: #fda4af;">Boss-Kampf</h3>
+                    <p style="color: #fecdd3;">Eskalierende Aufgaben gegen den Mathe-Boss – nur für starke Rechner!</p>
+                    <div class="topic-progress" style="background: #f43f5e; color: white;">⚔️ Boss!</div>
                 </div>
             </div>
         </div>

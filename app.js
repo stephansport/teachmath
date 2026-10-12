@@ -7,6 +7,9 @@ const state = {
     streak: 0,
     dailyProgress: 0,
     totalSolved: 0,
+    weeklyGoal: 10,
+    weeklyProgress: 0,
+    currentDifficulty: 'mittel',
     achievements: [],
     currentTopic: null,
     currentExercise: null,
@@ -24,6 +27,8 @@ const state = {
 const achievements = [
     { id: 'first_task', name: 'Erste Schritte', desc: 'Erste Aufgabe gelöst', icon: '🎯', unlocked: false },
     { id: 'daily_done', name: 'Tagessieger', desc: '5 Aufgaben an einem Tag', icon: '🌟', unlocked: false },
+    { id: 'weekly_goal', name: 'Ziel erreicht', desc: 'Wöchentliches Lernziel geschafft', icon: '🏁', unlocked: false },
+    { id: 'boss_champion', name: 'Boss-Champion', desc: 'Boss-Kampf erfolgreich gemeistert', icon: '👑', unlocked: false },
     { id: 'streak_3', name: 'Durchhaltevermögen', desc: '3 Tage am Stück', icon: '🔥', unlocked: false },
     { id: 'level_3', name: 'Fortgeschritten', desc: 'Level 3 erreicht', icon: '🚀', unlocked: false },
     { id: 'level_5', name: 'Experte', desc: 'Level 5 erreicht', icon: '🤓', unlocked: false },
@@ -35,6 +40,12 @@ const achievements = [
     { id: 'speed_demon', name: 'Blitzrechner', desc: '20 Aufgaben in einer Session', icon: '⚡', unlocked: false },
     { id: 'all_topics', name: 'Allrounder', desc: 'Alle Themen ausprobiert', icon: '🎓', unlocked: false }
 ];
+
+const difficultyPools = {
+    leicht: ['addition', 'subtraction', 'wordProblem', 'lengthConversion', 'rectanglePerimeter', 'timeConversion'],
+    mittel: ['multiplication', 'division', 'orderOfOperations', 'brackets', 'weightConversion', 'rectangleArea', 'complexWordProblem'],
+    schwer: ['estimation', 'numberSequence', 'findError', 'placeholder', 'complexWordProblem', 'cuboidVolume', 'rounding']
+};
 
 // Exercise Generators - Umfangreiche 5. Klasse Themen
 const exerciseGenerators = {
@@ -280,6 +291,118 @@ const exerciseGenerators = {
             type: 'input',
             hint: 'Volumen = Länge × Breite × Höhe',
             unit: 'cm³'
+        };
+    },
+
+    // Boss-Kampf: kombinierte Aufgaben mit mehreren Rechenschritten
+    bossArena: () => {
+        const a = Math.floor(Math.random() * 20) + 8;
+        const b = Math.floor(Math.random() * 15) + 5;
+        const c = Math.floor(Math.random() * 12) + 4;
+        const mode = ['double', 'bracket', 'mixed'][Math.floor(Math.random() * 3)];
+
+        if (mode === 'double') {
+            const answer = (a * b) + c;
+            return {
+                question: `Boss-Aufgabe: ${a} × ${b} + ${c} = ?`,
+                answer,
+                topic: 'Boss: Arena',
+                type: 'input',
+                hint: 'Punkt vor Strich: zuerst multiplizieren, dann addieren.',
+                unit: ''
+            };
+        }
+
+        if (mode === 'bracket') {
+            const answer = (a + b) * c;
+            return {
+                question: `Boss-Aufgabe: (${a} + ${b}) × ${c} = ?`,
+                answer,
+                topic: 'Boss: Arena',
+                type: 'input',
+                hint: 'Klammern zuerst, dann multiplizieren.',
+                unit: ''
+            };
+        }
+
+        const answer = a * (b + c) - 2;
+        return {
+            question: `Boss-Aufgabe: ${a} × (${b} + ${c}) - 2 = ?`,
+            answer,
+            topic: 'Boss: Arena',
+            type: 'input',
+            hint: 'Klammer zuerst, dann multiplizieren und am Ende subtrahieren.',
+            unit: ''
+        };
+    },
+
+    bossGeometry: () => {
+        const length = Math.floor(Math.random() * 18) + 6;
+        const width = Math.floor(Math.random() * 12) + 4;
+        const height = Math.floor(Math.random() * 10) + 3;
+        const taskType = ['umfang', 'flaeche', 'volumen'][Math.floor(Math.random() * 3)];
+
+        if (taskType === 'umfang') {
+            return {
+                question: `Boss-Aufgabe: Ein Rechteck hat die Seiten ${length} cm und ${width} cm. Wie groß ist der Umfang?`,
+                answer: 2 * (length + width),
+                topic: 'Boss: Geometrie',
+                type: 'input',
+                hint: 'Umfang = 2 × (Länge + Breite)',
+                unit: 'cm'
+            };
+        }
+
+        if (taskType === 'flaeche') {
+            return {
+                question: `Boss-Aufgabe: Ein Rechteck hat die Seiten ${length} cm und ${width} cm. Wie groß ist der Flächeninhalt?`,
+                answer: length * width,
+                topic: 'Boss: Geometrie',
+                type: 'input',
+                hint: 'Fläche = Länge × Breite',
+                unit: 'cm²'
+            };
+        }
+
+        return {
+            question: `Boss-Aufgabe: Ein Quader ist ${length} cm lang, ${width} cm breit und ${height} cm hoch. Wie groß ist sein Volumen?`,
+            answer: length * width * height,
+            topic: 'Boss: Geometrie',
+            type: 'input',
+            hint: 'Volumen = Länge × Breite × Höhe',
+            unit: 'cm³'
+        };
+    },
+
+    bossLogic: () => {
+        const a = Math.floor(Math.random() * 80) + 20;
+        const b = Math.floor(Math.random() * 40) + 10;
+        const c = Math.floor(Math.random() * 55) + 15;
+        const answer = a + b - c;
+
+        return {
+            question: `Boss-Aufgabe: ${a} + ${b} - ${c} = ?`,
+            answer,
+            topic: 'Boss: Logik',
+            type: 'input',
+            hint: 'Erst addieren, dann subtrahieren.',
+            unit: ''
+        };
+    },
+
+    bossMultiStep: () => {
+        const a = Math.floor(Math.random() * 23) + 7;
+        const b = Math.floor(Math.random() * 18) + 4;
+        const c = Math.floor(Math.random() * 9) + 2;
+        const answer = (a * b) / c;
+
+        return {
+            question: `Boss-Aufgabe: (${a} × ${b}) : ${c} = ?`,
+            answer,
+            topic: 'Boss: Mehrschritt',
+            type: 'input',
+            hint: 'Rechne zuerst die Multiplikation und teile dann durch die letzte Zahl.',
+            unit: ''
         };
     },
     
@@ -540,6 +663,23 @@ function attachEventListeners() {
     document.getElementById('next-btn').addEventListener('click', nextExercise);
     document.getElementById('quit-btn').addEventListener('click', quitTraining);
     document.getElementById('modal-close').addEventListener('click', closeModal);
+    document.getElementById('goal-select').addEventListener('change', (e) => {
+        state.weeklyGoal = Number(e.target.value);
+        if (state.weeklyProgress > state.weeklyGoal) {
+            state.weeklyProgress = state.weeklyGoal;
+        }
+        saveState();
+        updateUI();
+    });
+
+    document.querySelectorAll('.difficulty-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            state.currentDifficulty = btn.dataset.difficulty;
+            document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.toggle('active', b === btn));
+            saveState();
+            updateUI();
+        });
+    });
     
     // Navigation
     document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -610,6 +750,7 @@ function startTraining(topic) {
 // Generate Exercise Set
 function generateExerciseSet(topic, count) {
     const exercises = [];
+    const baseDifficulty = difficultyPools[state.currentDifficulty] || difficultyPools.mittel;
     
     const topicMappings = {
         'mixed': ['addition', 'subtraction', 'multiplication', 'division', 'orderOfOperations', 'brackets', 'wordProblem', 'estimation', 'placeholder'],
@@ -619,35 +760,34 @@ function generateExerciseSet(topic, count) {
         'geometry': ['rectanglePerimeter', 'rectangleArea', 'cuboidVolume'],
         'advanced': ['orderOfOperations', 'brackets', 'rounding', 'numberLine', 'numberSequence', 'findError', 'placeholder'],
         'wordProblems': ['wordProblem', 'complexWordProblem'],
-        'challenge': ['estimation', 'numberSequence', 'findError', 'placeholder', 'complexWordProblem']
+        'challenge': ['estimation', 'numberSequence', 'findError', 'placeholder', 'complexWordProblem'],
+        'boss': ['bossArena', 'bossGeometry', 'bossLogic', 'bossMultiStep']
     };
-    
-    console.log('Generating exercise set for topic:', topic);
-    console.log('Available types:', topicMappings[topic]);
     
     for (let i = 0; i < count; i++) {
         let types;
         
         if (topicMappings[topic]) {
-            types = topicMappings[topic];
+            types = [...topicMappings[topic], ...baseDifficulty];
         } else if (exerciseGenerators[topic]) {
             types = [topic];
         } else {
             types = ['addition', 'subtraction', 'multiplication', 'division'];
         }
+
+        if (state.currentDifficulty === 'leicht') {
+            types = types.filter(type => !['estimation', 'numberSequence', 'findError', 'placeholder', 'complexWordProblem', 'cuboidVolume', 'rounding'].includes(type));
+        }
         
         const randomType = types[Math.floor(Math.random() * types.length)];
-        console.log('Selected type:', randomType);
         
         if (!exerciseGenerators[randomType]) {
-            console.error('Generator not found for:', randomType);
             continue;
         }
         
         exercises.push(exerciseGenerators[randomType]());
     }
     
-    console.log('Generated exercises:', exercises.map(e => e.topic));
     return exercises;
 }
 
@@ -727,6 +867,7 @@ function checkAnswer() {
         state.points += points;
         state.dailyProgress++;
         state.totalSolved++;
+        state.weeklyProgress++;
         
         // Track correct answers in current session
         if (!state.currentSessionCorrect) {
@@ -844,6 +985,14 @@ function checkAchievements() {
     if (state.dailyProgress >= 5) {
         unlockAchievement('daily_done');
     }
+
+    if (state.weeklyProgress >= state.weeklyGoal) {
+        unlockAchievement('weekly_goal');
+    }
+
+    if (state.currentTopic === 'boss' && state.currentSessionCorrect >= 3) {
+        unlockAchievement('boss_champion');
+    }
     
     // Topic-specific achievements
     if (state.topicStats.geometry >= 10) {
@@ -940,6 +1089,31 @@ function updateUI() {
     document.getElementById('points').textContent = state.points;
     document.getElementById('level').textContent = state.level;
     document.getElementById('streak').textContent = state.streak;
+
+    const goalSelect = document.getElementById('goal-select');
+    if (goalSelect) {
+        goalSelect.value = String(state.weeklyGoal);
+    }
+
+    const goalProgress = Math.min((state.weeklyProgress / state.weeklyGoal) * 100, 100);
+    const goalProgressElement = document.getElementById('goal-progress');
+    if (goalProgressElement) {
+        goalProgressElement.style.width = `${goalProgress}%`;
+    }
+
+    const goalProgressText = document.getElementById('goal-progress-text');
+    if (goalProgressText) {
+        goalProgressText.textContent = `${state.weeklyProgress}/${state.weeklyGoal}`;
+    }
+
+    const goalBadge = document.getElementById('goal-badge');
+    if (goalBadge) {
+        goalBadge.textContent = state.weeklyProgress >= state.weeklyGoal ? 'Ziel erreicht' : 'Im Plan';
+    }
+
+    document.querySelectorAll('.difficulty-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.difficulty === state.currentDifficulty);
+    });
     
     const dailyPercent = (state.dailyProgress / 5) * 100;
     document.getElementById('daily-progress').style.width = `${Math.min(dailyPercent, 100)}%`;
@@ -1024,6 +1198,15 @@ function loadState() {
         }
         if (!state.totalSolved) {
             state.totalSolved = 0;
+        }
+        if (!state.weeklyGoal) {
+            state.weeklyGoal = 10;
+        }
+        if (!state.weeklyProgress) {
+            state.weeklyProgress = 0;
+        }
+        if (!state.currentDifficulty) {
+            state.currentDifficulty = 'mittel';
         }
         
         // Sync achievements
