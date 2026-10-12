@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeachMath Adventure – Der Schatz der Zahleninsel</title>
+    <link rel="stylesheet" href="adventure.css">
+</head>
+<body>
+
+<!-- Settings-Link (oben rechts) -->
+<div style="position:fixed; top:14px; right:16px; z-index:100;">
+    <a href="settings.html" style="background:#1e293b; color:#94a3b8; border:1px solid #334155; padding:8px 14px; border-radius:8px; text-decoration:none; font-size:0.9rem;">⚙️ Einstellungen</a>
+</div>
+
+<!-- STARTBILDSCHIRM -->
+<div id="screen-start" class="screen active">
+    <div class="title-card">
+        <div class="title-emoji">🏴‍☠️</div>
+        <h1>Der Schatz der Zahleninsel</h1>
+        <p class="subtitle">Ein Mathe-Abenteuer für Entdecker</p>
+        <div class="lives-info">❤️ Du hast 3 Leben – bei 3 Fehlern ist das Abenteuer vorbei!</div>
+        <input type="text" id="player-name" placeholder="Dein Name, Abenteurer!" maxlength="20">
+        <button class="btn-primary" id="btn-start">⚓ Abenteuer beginnen!</button>
+
+        <div class="highscores-box" id="highscores-box"></div>
+    </div>
+</div>
+
+<!-- SPIELBILDSCHIRM -->
+<div id="screen-game" class="screen">
+    <!-- HUD -->
+    <div class="hud">
+        <div class="hud-name" id="hud-name">Abenteurer</div>
+        <div class="hud-center">
+            <span class="hud-scene" id="hud-scene">Kapitel 1</span>
+        </div>
+        <div class="hud-right">
+            <span id="hud-lives">❤️❤️❤️</span>
+            <span class="hud-score">⭐ <span id="hud-score">0</span></span>
+        </div>
+    </div>
+
+    <!-- Fortschrittsbalken -->
+    <div class="chapter-progress">
+        <div class="chapter-step" id="cp-start">🏙️</div>
+        <div class="chapter-line"></div>
+        <div class="chapter-step" id="cp-sea">⛵</div>
+        <div class="chapter-line"></div>
+        <div class="chapter-step" id="cp-island">🏝️</div>
+        <div class="chapter-line"></div>
+        <div class="chapter-step" id="cp-cave">🗻</div>
+        <div class="chapter-line"></div>
+        <div class="chapter-step" id="cp-treasure">💰</div>
+    </div>
+
+    <!-- Hauptkarte -->
+    <div class="story-card" id="story-card">
+        <div class="scene-emoji" id="scene-emoji">🏙️</div>
+        <h2 id="scene-title">Kapitel</h2>
+        <div class="story-text" id="story-text"></div>
+
+        <!-- Aufgabe -->
+        <div id="challenge-box" class="challenge-box hidden">
+            <div class="challenge-text" id="challenge-text"></div>
+            <div class="challenge-input-row">
+                <input type="number" id="challenge-input" placeholder="Deine Antwort" step="any">
+                <span class="unit-label" id="unit-label"></span>
+            </div>
+            <div class="hint-box" id="hint-box"></div>
+            <div id="challenge-feedback" class="challenge-feedback hidden"></div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="btn-row">
+            <button class="btn-hint" id="btn-hint">💡 Tipp anzeigen</button>
+            <button class="btn-primary" id="btn-action">Weiter →</button>
+        </div>
+    </div>
+</div>
+
+<!-- GAME-OVER -->
+<div id="screen-gameover" class="screen">
+    <div class="title-card">
+        <div class="title-emoji">💀</div>
+        <h1>Abenteuer beendet!</h1>
+        <p id="gameover-text">Du hast alle Leben verloren.</p>
+        <p>Punkte: <strong id="gameover-score">0</strong> ⭐</p>
+        <button class="btn-primary" id="btn-retry">🔄 Nochmal versuchen</button>
+        <button class="btn-secondary" id="btn-menu-go">🏠 Zum Menü</button>
+    </div>
+</div>
+
+<!-- GEWONNEN -->
+<div id="screen-win" class="screen">
+    <div class="title-card win-card">
+        <div class="title-emoji anim-bounce">🏆</div>
+        <h1>Schatz gefunden!</h1>
+        <p id="win-text"></p>
+        <p class="win-score">⭐ <span id="win-score">0</span> Punkte</p>
+        <button class="btn-primary" id="btn-play-again">🔄 Nochmal spielen</button>
+        <button class="btn-secondary" id="btn-menu-win">🏠 Zum Menü</button>
+    </div>
+</div>
+
+<script src="adventure.js"></script>
+<script src="adventure-ui.js"></script>
+</body>
+</html>
