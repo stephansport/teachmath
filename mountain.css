@@ -1,0 +1,72 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: linear-gradient(180deg, #0f172a 0%, #1e3a2f 100%); color: #e2e8f0; min-height: 100vh; padding: 16px; }
+.screen { display: none; max-width: 720px; margin: 0 auto; }
+.screen.active { display: block; }
+.card { background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 22px; margin-bottom: 14px; box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+.center { text-align: center; }
+.scene { margin-bottom: 14px; }
+.scene-svg { width: 100%; height: auto; display: block; border-radius: 12px; border: 2px solid #334155; }
+h1 { font-size: 1.8rem; margin: 8px 0 10px; color: #f8fafc; }
+h2 { font-size: 1.35rem; color: #fbbf24; margin-bottom: 10px; }
+h3 { font-size: 1.05rem; margin-bottom: 10px; color: #cbd5e1; }
+.sub { color: #94a3b8; margin-bottom: 14px; line-height: 1.5; }
+.rules { background: #0f2a1f; color: #86efac; border-radius: 10px; padding: 10px; font-size: .9rem; margin-bottom: 16px; }
+#player-name { width: 100%; padding: 14px; font-size: 1.1rem; text-align: center; border-radius: 10px; border: 2px solid #334155; background: #0f172a; color: #f1f5f9; margin-bottom: 12px; }
+.btn { display: block; width: 100%; padding: 14px; border-radius: 10px; border: 2px solid #334155; background: transparent; color: #e2e8f0; font-size: 1rem; font-weight: 600; cursor: pointer; margin-bottom: 10px; transition: transform .1s, background .2s; }
+.btn:hover { transform: translateY(-1px); background: #273449; }
+.btn.primary { background: #16a34a; border-color: #16a34a; color: #fff; }
+.btn.primary:hover { background: #15803d; }
+.btn.gold { background: #f59e0b; border-color: #f59e0b; color: #1c1917; }
+.btn.hint { border-color: #f59e0b; color: #fbbf24; }
+.btn.small { width: auto; display: inline-block; padding: 8px 14px; font-size: .9rem; margin: 0; }
+.hud { display: flex; justify-content: space-between; align-items: center; background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 10px 16px; margin-bottom: 10px; font-weight: 700; }
+.hud-score { color: #fbbf24; }
+.toolbar { display: flex; gap: 8px; justify-content: flex-end; margin-bottom: 10px; flex-wrap: wrap; }
+.loc-text { line-height: 1.75; color: #cbd5e1; margin-bottom: 14px; font-size: 1.05rem; }
+.loc-text b { color: #fff; }
+.msg { background: #0f2a1f; border-left: 4px solid #22c55e; padding: 12px 14px; border-radius: 8px; margin-bottom: 14px; line-height: 1.6; }
+.msg i { color: #fbbf24; }
+.actions { display: flex; flex-direction: column; gap: 8px; }
+.act { text-align: left; padding: 13px 16px; border-radius: 10px; border: 2px solid #334155; background: #0f172a; color: #e2e8f0; font-size: 1rem; cursor: pointer; transition: border-color .2s, transform .1s; }
+.act:hover { border-color: #22c55e; transform: translateX(3px); }
+.act-item { border-color: #1d4ed8; }
+.act-rest { border-color: #7c3aed; }
+.challenge { background: #0c1f3d; border: 2px solid #1e40af; border-radius: 12px; padding: 18px; margin-bottom: 14px; }
+.ch-head { font-weight: 800; color: #93c5fd; margin-bottom: 8px; }
+.ch-text { line-height: 1.7; color: #dbeafe; margin-bottom: 12px; }
+.ch-text b { color: #fff; }
+.ch-row { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; }
+#ch-input { flex: 1; min-width: 0; padding: 12px; font-size: 1.3rem; text-align: center; border-radius: 8px; border: 2px solid #334155; background: #0f172a; color: #f1f5f9; }
+#ch-input:focus, #player-name:focus { outline: none; border-color: #22c55e; }
+.ch-unit { color: #94a3b8; min-width: 40px; }
+.ch-hint { color: #fbbf24; min-height: 20px; margin-bottom: 6px; }
+.ch-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+.ch-buttons .btn { width: auto; flex: 1; margin: 0; }
+.feedback { padding: 10px; border-radius: 8px; margin-bottom: 10px; font-weight: 600; text-align: center; }
+.feedback.wrong { background: rgba(239,68,68,.15); color: #fca5a5; border: 1px solid #ef4444; }
+.inventory { display: flex; flex-wrap: wrap; gap: 8px; }
+.inv-item { padding: 8px 12px; border-radius: 20px; border: 1px solid #475569; background: #0f172a; color: #e2e8f0; cursor: pointer; font-size: .95rem; }
+.inv-item.usable { border-color: #22c55e; }
+.inv-empty { color: #64748b; font-style: italic; }
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,.75); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 50; }
+.map-card { max-width: 560px; width: 100%; }
+.map-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 14px; }
+.map-cell { min-height: 56px; border-radius: 8px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: .78rem; padding: 4px; }
+.map-cell.visited { background: #14532d; border: 1px solid #22c55e; }
+.map-cell.here { background: #a16207; border: 2px solid #fde047; font-weight: 700; }
+.map-cell.unknown { background: #1e293b; border: 1px dashed #475569; font-size: 1.2rem; }
+.exits { margin: 14px 0; }
+.exits-title { font-weight: 700; margin-bottom: 8px; color: #fbbf24; }
+.exit-chip { display: inline-block; margin: 3px; padding: 6px 12px; border-radius: 16px; background: #0f172a; border: 1px dashed #475569; color: #94a3b8; font-size: .9rem; }
+.exit-chip.found { border: 1px solid #22c55e; color: #86efac; }
+.hs { text-align: left; margin-top: 14px; }
+.hs-row { padding: 6px 0; border-bottom: 1px solid #334155; color: #cbd5e1; font-size: .95rem; }
+.links { margin-top: 16px; color: #64748b; }
+.links a { color: #93c5fd; text-decoration: none; }
+.big { font-size: 1.4rem; color: #fbbf24; margin: 12px 0; }
+.huge { font-size: 4rem; }
+.win { border-color: #fbbf24; }
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(120px); background: #0f172a; border: 1px solid #22c55e; color: #fff; padding: 12px 20px; border-radius: 10px; transition: transform .3s; z-index: 99; max-width: 90%; text-align: center; }
+.toast.show { transform: translateX(-50%) translateY(0); }
+.hidden { display: none !important; }
+@media (max-width: 480px) { h1 { font-size: 1.4rem; } .card { padding: 16px; } .map-cell { font-size: .65rem; min-height: 48px; } }
