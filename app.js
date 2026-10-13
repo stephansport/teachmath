@@ -11,6 +11,7 @@ const state = {
     weeklyProgress: 0,
     weeklyProgressWeek: '',
     currentDifficulty: 'mittel',
+    bossChampionRuleVersion: 2,
     achievements: [],
     currentTopic: null,
     currentExercise: null,
@@ -29,7 +30,7 @@ const achievements = [
     { id: 'first_task', name: 'Erste Schritte', desc: 'Erste Aufgabe gelöst', icon: '🎯', unlocked: false },
     { id: 'daily_done', name: 'Tagessieger', desc: '5 Aufgaben an einem Tag', icon: '🌟', unlocked: false },
     { id: 'weekly_goal', name: 'Ziel erreicht', desc: 'Wöchentliches Lernziel geschafft', icon: '🏁', unlocked: false },
-    { id: 'boss_champion', name: 'Boss-Champion', desc: 'Boss-Kampf erfolgreich gemeistert', icon: '👑', unlocked: false },
+    { id: 'boss_champion', name: 'Boss-Champion', desc: 'Boss-Kampf mit 5 von 5 richtigen Antworten gemeistert', icon: '👑', unlocked: false },
     { id: 'streak_3', name: 'Durchhaltevermögen', desc: '3 Tage am Stück', icon: '🔥', unlocked: false },
     { id: 'level_3', name: 'Fortgeschritten', desc: 'Level 3 erreicht', icon: '🚀', unlocked: false },
     { id: 'level_5', name: 'Experte', desc: 'Level 5 erreicht', icon: '🤓', unlocked: false },
@@ -1260,6 +1261,7 @@ function loadState() {
     
     if (saved) {
         const loaded = JSON.parse(saved);
+        const resetLegacyBossChampion = loaded.bossChampionRuleVersion !== 2;
         Object.assign(state, loaded);
         
         // Convert Array back to Set
@@ -1288,6 +1290,11 @@ function loadState() {
         if (!state.weeklyProgressWeek) {
             state.weeklyProgressWeek = '';
         }
+
+        if (resetLegacyBossChampion) {
+            state.achievements = state.achievements.filter(id => id !== 'boss_champion');
+            state.bossChampionRuleVersion = 2;
+        }
         
         // Sync achievements
         achievements.forEach(ach => {
@@ -1295,6 +1302,14 @@ function loadState() {
                 ach.unlocked = true;
             }
         });
+
+        if (resetLegacyBossChampion) {
+            const bossAchievement = achievements.find(ach => ach.id === 'boss_champion');
+            if (bossAchievement) {
+                bossAchievement.unlocked = false;
+            }
+            saveState();
+        }
     }
 }
 
