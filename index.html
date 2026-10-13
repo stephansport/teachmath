@@ -108,6 +108,13 @@
                     <p>Grundrechenarten bis 1000</p>
                     <div class="topic-progress">Stufe 1</div>
                 </div>
+
+                <div class="topic-card" id="geometry-tutorial-card" style="border: 3px solid #10b981; background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); cursor: pointer;">
+                    <div class="topic-icon">📐</div>
+                    <h3 style="color: #065f46;">Geometrie erklärt</h3>
+                    <p style="color: #0f766e;">Umfang, Fläche, Volumen und Boss-Modus</p>
+                    <div class="topic-progress" style="background: #10b981; color: #fff;">Lernhilfe</div>
+                </div>
                 
                 <div class="topic-card" data-topic="multiplication">
                     <div class="topic-icon">✖️</div>
@@ -193,6 +200,8 @@
                     <div class="topic-progress" style="background: #f43f5e; color: white;">⚔️ Boss!</div>
                 </div>
             </div>
+
+            <div id="geometry-module" class="geometry-module card"></div>
         </div>
 
         <!-- Training Screen -->
@@ -253,6 +262,7 @@
     </div>
 
     <script src="app.js"></script>
+    <script src="geometry-module.js"></script>
     <script>
         // Adventure-Karte verlinken
         document.getElementById('adventure-card').addEventListener('click', () => {
@@ -269,6 +279,12 @@
         });
         document.getElementById('jungle-card').addEventListener('click', () => {
             window.location.href = 'jungle.html';
+        });
+        document.getElementById('geometry-tutorial-card').addEventListener('click', () => {
+            const target = document.getElementById('geometry-module');
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         });
     </script>
 </body>
