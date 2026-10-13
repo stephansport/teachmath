@@ -9,6 +9,7 @@ const state = {
     totalSolved: 0,
     weeklyGoal: 10,
     weeklyProgress: 0,
+    weeklyProgressWeek: '',
     currentDifficulty: 'mittel',
     achievements: [],
     currentTopic: null,
@@ -47,12 +48,61 @@ const difficultyPools = {
     schwer: ['estimation', 'numberSequence', 'findError', 'placeholder', 'complexWordProblem', 'cuboidVolume', 'rounding']
 };
 
+const topicDifficultyPools = {
+    addition: {
+        leicht: ['addition', 'subtraction'], mittel: ['addition', 'subtraction'], schwer: ['addition', 'subtraction']
+    },
+    multiplication: {
+        leicht: ['multiplication', 'division'], mittel: ['multiplication', 'division'], schwer: ['multiplication', 'division']
+    },
+    conversions: {
+        leicht: ['lengthConversion', 'timeConversion'],
+        mittel: ['lengthConversion', 'weightConversion', 'timeConversion'],
+        schwer: ['lengthConversion', 'weightConversion', 'timeConversion']
+    },
+    geometry: {
+        leicht: ['rectanglePerimeter'],
+        mittel: ['rectanglePerimeter', 'rectangleArea'],
+        schwer: ['rectangleArea', 'cuboidVolume']
+    },
+    advanced: {
+        leicht: ['orderOfOperations', 'rounding', 'numberLine'],
+        mittel: ['orderOfOperations', 'brackets', 'rounding', 'numberLine', 'numberSequence'],
+        schwer: ['brackets', 'numberSequence', 'findError', 'placeholder', 'estimation']
+    },
+    wordProblems: {
+        leicht: ['wordProblem'],
+        mittel: ['wordProblem', 'complexWordProblem'],
+        schwer: ['complexWordProblem']
+    },
+    challenge: {
+        leicht: ['numberLine', 'placeholder'],
+        mittel: ['estimation', 'numberSequence', 'placeholder', 'complexWordProblem'],
+        schwer: ['estimation', 'numberSequence', 'findError', 'placeholder', 'complexWordProblem']
+    },
+    boss: {
+        leicht: ['bossLogic', 'bossGeometry'],
+        mittel: ['bossLogic', 'bossGeometry', 'bossArena'],
+        schwer: ['bossArena', 'bossGeometry', 'bossLogic', 'bossMultiStep']
+    }
+};
+
+function randomForDifficulty(min, max) {
+    const midpoint = min + Math.ceil((max - min) / 2);
+    const range = state.currentDifficulty === 'leicht'
+        ? [min, midpoint]
+        : state.currentDifficulty === 'schwer'
+            ? [midpoint, max]
+            : [min, max];
+    return Math.floor(Math.random() * (range[1] - range[0] + 1)) + range[0];
+}
+
 // Exercise Generators - Umfangreiche 5. Klasse Themen
 const exerciseGenerators = {
     // Grundrechenarten
     addition: () => {
-        const a = Math.floor(Math.random() * 900) + 100;  // 100-999
-        const b = Math.floor(Math.random() * 900) + 100;
+        const a = randomForDifficulty(100, 999);
+        const b = randomForDifficulty(100, 999);
         return {
             question: `${a} + ${b} = ?`,
             answer: a + b,
@@ -63,7 +113,7 @@ const exerciseGenerators = {
     },
     
     subtraction: () => {
-        const a = Math.floor(Math.random() * 900) + 100;
+        const a = randomForDifficulty(100, 999);
         const b = Math.floor(Math.random() * (a - 10)) + 10;
         return {
             question: `${a} - ${b} = ?`,
@@ -75,8 +125,8 @@ const exerciseGenerators = {
     },
     
     multiplication: () => {
-        const a = Math.floor(Math.random() * 13) + 3;
-        const b = Math.floor(Math.random() * 13) + 3;
+        const a = randomForDifficulty(3, 15);
+        const b = randomForDifficulty(3, 15);
         const answer = a * b;
         
         const choices = [answer];
@@ -98,8 +148,8 @@ const exerciseGenerators = {
     },
     
     division: () => {
-        const b = Math.floor(Math.random() * 10) + 2;
-        const result = Math.floor(Math.random() * 20) + 5;
+        const b = randomForDifficulty(2, 11);
+        const result = randomForDifficulty(5, 24);
         const a = b * result;
         
         return {
@@ -158,7 +208,7 @@ const exerciseGenerators = {
     
     // Runden
     rounding: () => {
-        const num = Math.floor(Math.random() * 9000) + 1000; // 1000-9999
+        const num = randomForDifficulty(1000, 9999);
         const roundTo = [10, 100, 1000][Math.floor(Math.random() * 3)];
         
         let answer;
@@ -191,7 +241,9 @@ const exerciseGenerators = {
         ];
         
         const conv = conversions[Math.floor(Math.random() * conversions.length)];
-        const value = conv.factor >= 1 ? Math.floor(Math.random() * 20) + 1 : Math.floor(Math.random() * 5000) + 1000;
+        const value = conv.factor >= 1
+            ? randomForDifficulty(1, 20)
+            : randomForDifficulty(1000, 5999);
         const answer = value * conv.factor;
         
         return {
@@ -212,7 +264,7 @@ const exerciseGenerators = {
         ];
         
         const conv = conversions[Math.floor(Math.random() * conversions.length)];
-        const value = Math.floor(Math.random() * 50) + 1;
+        const value = randomForDifficulty(1, 50);
         const answer = value * conv.factor;
         
         return {
@@ -233,7 +285,7 @@ const exerciseGenerators = {
         ];
         
         const conv = conversions[Math.floor(Math.random() * conversions.length)];
-        const value = Math.floor(Math.random() * 10) + 1;
+        const value = randomForDifficulty(1, 10);
         const answer = value * conv.factor;
         
         return {
@@ -247,8 +299,8 @@ const exerciseGenerators = {
     
     // Geometrie: Umfang Rechteck
     rectanglePerimeter: () => {
-        const length = Math.floor(Math.random() * 20) + 5;
-        const width = Math.floor(Math.random() * 15) + 3;
+        const length = randomForDifficulty(5, 24);
+        const width = randomForDifficulty(3, 17);
         const answer = 2 * (length + width);
         
         return {
@@ -263,8 +315,8 @@ const exerciseGenerators = {
     
     // Geometrie: Flächeninhalt Rechteck
     rectangleArea: () => {
-        const length = Math.floor(Math.random() * 20) + 5;
-        const width = Math.floor(Math.random() * 15) + 3;
+        const length = randomForDifficulty(5, 24);
+        const width = randomForDifficulty(3, 17);
         const answer = length * width;
         
         return {
@@ -279,9 +331,9 @@ const exerciseGenerators = {
     
     // Geometrie: Volumen Quader
     cuboidVolume: () => {
-        const length = Math.floor(Math.random() * 10) + 3;
-        const width = Math.floor(Math.random() * 10) + 3;
-        const height = Math.floor(Math.random() * 10) + 3;
+        const length = randomForDifficulty(3, 12);
+        const width = randomForDifficulty(3, 12);
+        const height = randomForDifficulty(3, 12);
         const answer = length * width * height;
         
         return {
@@ -296,9 +348,9 @@ const exerciseGenerators = {
 
     // Boss-Kampf: kombinierte Aufgaben mit mehreren Rechenschritten
     bossArena: () => {
-        const a = Math.floor(Math.random() * 20) + 8;
-        const b = Math.floor(Math.random() * 15) + 5;
-        const c = Math.floor(Math.random() * 12) + 4;
+        const a = randomForDifficulty(8, 27);
+        const b = randomForDifficulty(5, 19);
+        const c = randomForDifficulty(4, 15);
         const mode = ['double', 'bracket', 'mixed'][Math.floor(Math.random() * 3)];
 
         if (mode === 'double') {
@@ -337,9 +389,9 @@ const exerciseGenerators = {
     },
 
     bossGeometry: () => {
-        const length = Math.floor(Math.random() * 18) + 6;
-        const width = Math.floor(Math.random() * 12) + 4;
-        const height = Math.floor(Math.random() * 10) + 3;
+        const length = randomForDifficulty(6, 23);
+        const width = randomForDifficulty(4, 15);
+        const height = randomForDifficulty(3, 12);
         const taskType = ['umfang', 'flaeche', 'volumen'][Math.floor(Math.random() * 3)];
 
         if (taskType === 'umfang') {
@@ -375,9 +427,9 @@ const exerciseGenerators = {
     },
 
     bossLogic: () => {
-        const a = Math.floor(Math.random() * 80) + 20;
-        const b = Math.floor(Math.random() * 40) + 10;
-        const c = Math.floor(Math.random() * 55) + 15;
+        const a = randomForDifficulty(20, 99);
+        const b = randomForDifficulty(10, 49);
+        const c = randomForDifficulty(15, Math.min(69, a + b));
         const answer = a + b - c;
 
         return {
@@ -391,10 +443,11 @@ const exerciseGenerators = {
     },
 
     bossMultiStep: () => {
-        const a = Math.floor(Math.random() * 23) + 7;
-        const b = Math.floor(Math.random() * 18) + 4;
-        const c = Math.floor(Math.random() * 9) + 2;
-        const answer = (a * b) / c;
+        const a = randomForDifficulty(7, 29);
+        const c = randomForDifficulty(2, 10);
+        const factor = randomForDifficulty(2, 8);
+        const b = c * factor;
+        const answer = a * factor;
 
         return {
             question: `Boss-Aufgabe: (${a} × ${b}) : ${c} = ?`,
@@ -433,8 +486,8 @@ const exerciseGenerators = {
         ];
         
         const prob = problems[Math.floor(Math.random() * problems.length)];
-        const a = Math.floor(Math.random() * 50) + 25; // 25-74 (immer größer als b -> kein negatives Ergebnis)
-        const b = Math.floor(Math.random() * 20) + 2;  // 2-21
+        const a = randomForDifficulty(25, 74);
+        const b = randomForDifficulty(2, 21);
         
         return {
             question: prob.text(a, b),
@@ -495,7 +548,7 @@ const exerciseGenerators = {
         // Starte mit einer durch 2, 3, 4 oder 5 teilbaren Zahl
         const divisors = [2, 3, 4, 5];
         const divisor = divisors[Math.floor(Math.random() * divisors.length)];
-        const startBase = Math.floor(Math.random() * 10) + 5; // 5-14
+        const startBase = randomForDifficulty(5, 14);
         const start = startBase * divisor; // Damit Division aufgeht
         
         // Einfachere Operationen
@@ -643,6 +696,7 @@ const exerciseGenerators = {
 // Initialize App
 function init() {
     loadState();
+    syncWeeklyProgress();
     
     if (state.username) {
         showScreen('dashboard');
@@ -665,9 +719,6 @@ function attachEventListeners() {
     document.getElementById('modal-close').addEventListener('click', closeModal);
     document.getElementById('goal-select').addEventListener('change', (e) => {
         state.weeklyGoal = Number(e.target.value);
-        if (state.weeklyProgress > state.weeklyGoal) {
-            state.weeklyProgress = state.weeklyGoal;
-        }
         saveState();
         updateUI();
     });
@@ -768,6 +819,8 @@ function generateExerciseSet(topic, count) {
         
         if (topic === 'mixed') {
             types = [...baseDifficulty];
+        } else if (topicDifficultyPools[topic]) {
+            types = [...(topicDifficultyPools[topic][state.currentDifficulty] || topicDifficultyPools[topic].mittel)];
         } else if (topicMappings[topic]) {
             types = [...topicMappings[topic]];
         } else if (exerciseGenerators[topic]) {
@@ -776,10 +829,6 @@ function generateExerciseSet(topic, count) {
             types = ['addition', 'subtraction', 'multiplication', 'division'];
         }
 
-        if (state.currentDifficulty === 'leicht') {
-            types = types.filter(type => !['estimation', 'numberSequence', 'findError', 'placeholder', 'complexWordProblem', 'cuboidVolume', 'rounding'].includes(type));
-        }
-        
         const randomType = types[Math.floor(Math.random() * types.length)];
         
         if (!exerciseGenerators[randomType]) {
@@ -840,6 +889,8 @@ function renderChoices(choices) {
 
 // Check Answer
 function checkAnswer() {
+    syncWeeklyProgress();
+    updateUI();
     let userAnswer;
     
     if (state.currentExercise.type === 'input') {
@@ -940,15 +991,21 @@ function nextExercise() {
 function finishTraining() {
     const correctCount = state.currentSessionCorrect || 0;
     const totalPoints = correctCount * 20;
+    const bossDefeated = state.currentTopic === 'boss' && correctCount === state.exerciseSet.length;
+
+    if (bossDefeated) {
+        unlockAchievement('boss_champion', false);
+    }
     
     showModal(
-        '🎉 Training abgeschlossen!',
+        bossDefeated ? '👑 Boss besiegt!' : '🎉 Training abgeschlossen!',
         `<p>Du hast <strong>${correctCount}/${state.exerciseSet.length}</strong> Aufgaben richtig gelöst!</p>
-        <p>Punkte verdient: <strong>${totalPoints}</strong> ⭐</p>`
+        <p>Punkte verdient: <strong>${totalPoints}</strong> ⭐</p>${bossDefeated ? '<p>Du hast den Boss-Kampf perfekt gemeistert!</p>' : ''}`
     );
     
     // Reset session counter
     state.currentSessionCorrect = 0;
+    saveState();
     
     showScreen('dashboard');
 }
@@ -991,10 +1048,6 @@ function checkAchievements() {
         unlockAchievement('weekly_goal');
     }
 
-    if (state.currentTopic === 'boss' && state.currentSessionCorrect >= 3) {
-        unlockAchievement('boss_champion');
-    }
-    
     // Topic-specific achievements
     if (state.topicStats.geometry >= 10) {
         unlockAchievement('geometry_master');
@@ -1025,14 +1078,16 @@ function checkAchievements() {
 }
 
 // Unlock Achievement
-function unlockAchievement(id) {
+function unlockAchievement(id, showNotification = true) {
     const achievement = achievements.find(a => a.id === id);
     
     if (achievement && !achievement.unlocked) {
         achievement.unlocked = true;
         state.achievements.push(id);
         
-        showModal('🏆 Erfolg freigeschaltet!', `<div style="font-size: 3rem; margin: 20px 0;">${achievement.icon}</div><p><strong>${achievement.name}</strong></p><p>${achievement.desc}</p>`);
+        if (showNotification) {
+            showModal('🏆 Erfolg freigeschaltet!', `<div style="font-size: 3rem; margin: 20px 0;">${achievement.icon}</div><p><strong>${achievement.name}</strong></p><p>${achievement.desc}</p>`);
+        }
         
         saveState();
         renderAchievements();
@@ -1160,6 +1215,27 @@ function updateLastActive() {
     localStorage.setItem('lastActive', today);
 }
 
+function currentIsoWeekKey() {
+    const today = new Date();
+    const weekDate = new Date(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()));
+    const weekday = weekDate.getUTCDay() || 7;
+    weekDate.setUTCDate(weekDate.getUTCDate() + 4 - weekday);
+    const yearStart = new Date(Date.UTC(weekDate.getUTCFullYear(), 0, 1));
+    const week = Math.ceil((((weekDate - yearStart) / 86400000) + 1) / 7);
+    return `${weekDate.getUTCFullYear()}-${String(week).padStart(2, '0')}`;
+}
+
+function syncWeeklyProgress() {
+    const weekKey = currentIsoWeekKey();
+    if (state.weeklyProgressWeek !== weekKey) {
+        state.weeklyProgress = 0;
+        state.weeklyProgressWeek = weekKey;
+        if (state.username) {
+            saveState();
+        }
+    }
+}
+
 // Save State
 function saveState() {
     // Convert Set to Array for JSON
@@ -1208,6 +1284,9 @@ function loadState() {
         }
         if (!state.currentDifficulty) {
             state.currentDifficulty = 'mittel';
+        }
+        if (!state.weeklyProgressWeek) {
+            state.weeklyProgressWeek = '';
         }
         
         // Sync achievements
