@@ -753,9 +753,8 @@ function generateExerciseSet(topic, count) {
     const baseDifficulty = difficultyPools[state.currentDifficulty] || difficultyPools.mittel;
     
     const topicMappings = {
-        'mixed': ['addition', 'subtraction', 'multiplication', 'division', 'orderOfOperations', 'brackets', 'wordProblem', 'estimation', 'placeholder'],
         'addition': ['addition', 'subtraction'],
-        'multiplication': ['multiplication', 'division', 'estimation'],
+        'multiplication': ['multiplication', 'division'],
         'conversions': ['lengthConversion', 'weightConversion', 'timeConversion'],
         'geometry': ['rectanglePerimeter', 'rectangleArea', 'cuboidVolume'],
         'advanced': ['orderOfOperations', 'brackets', 'rounding', 'numberLine', 'numberSequence', 'findError', 'placeholder'],
@@ -767,8 +766,10 @@ function generateExerciseSet(topic, count) {
     for (let i = 0; i < count; i++) {
         let types;
         
-        if (topicMappings[topic]) {
-            types = [...topicMappings[topic], ...baseDifficulty];
+        if (topic === 'mixed') {
+            types = [...baseDifficulty];
+        } else if (topicMappings[topic]) {
+            types = [...topicMappings[topic]];
         } else if (exerciseGenerators[topic]) {
             types = [topic];
         } else {
