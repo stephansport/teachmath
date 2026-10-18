@@ -515,6 +515,129 @@ const exerciseGenerators = {
             hint: 'Rechne: Start + (Schritte × Schrittgröße)'
         };
     },
+
+    testRounding: () => {
+        const tasks = [
+            { value: 958, place: 'auf Hunderter', unit: 100 },
+            { value: 40812, place: 'auf Hunderter', unit: 100 },
+            { value: 3394, place: 'auf Hunderter', unit: 100 },
+            { value: 19586, place: 'auf Zehntausender', unit: 10000 },
+            { value: 24999, place: 'auf Zehntausender', unit: 10000 },
+            { value: 80053, place: 'auf Zehntausender', unit: 10000 },
+            { question: 'Welche kleinste Zahl wird auf Tausender gerundet zu 3000?', answer: 2500 },
+            { question: 'Welche größte Zahl wird auf Tausender gerundet zu 3000?', answer: 3499 }
+        ];
+        const task = tasks[Math.floor(Math.random() * tasks.length)];
+        return {
+            question: task.question || `Runde ${task.value.toLocaleString('de-DE')} ${task.place}.`,
+            answer: task.answer ?? Math.round(task.value / task.unit) * task.unit,
+            topic: 'Klassenarbeit 1: Runden',
+            type: 'input'
+        };
+    },
+
+    testNumberWords: () => {
+        const tasks = [
+            { words: 'Dreihundert Millionen zweitausendsiebenhundertsechsunddreißig', answer: 300002736 },
+            { words: 'Zweiundzwanzig Milliarden neuntausend', answer: 22000009000 }
+        ];
+        const task = tasks[Math.floor(Math.random() * tasks.length)];
+        return {
+            question: `Schreibe die Zahl in Ziffern: ${task.words}`,
+            answer: task.answer,
+            topic: 'Klassenarbeit 1: Zahlwörter',
+            type: 'input'
+        };
+    },
+
+    testNumberProperties: () => {
+        const tasks = [
+            { question: 'Bilde die größte sechsstellige Zahl, die genau drei Nullen enthält.', answer: 999000 },
+            { question: 'Bilde die kleinste siebenstellige Zahl, die genau vier Neunen enthält.', answer: 1009999 }
+        ];
+        const task = tasks[Math.floor(Math.random() * tasks.length)];
+        return {
+            ...task,
+            topic: 'Klassenarbeit 1: Stellenwerte',
+            type: 'input'
+        };
+    },
+
+    testNumberLine: () => {
+        const targets = [45, 75, 80, 105, 130];
+        const target = targets[Math.floor(Math.random() * targets.length)];
+        return {
+            question: `Markiere ${target} auf der Zahlengeraden.`,
+            answer: target,
+            topic: 'Klassenarbeit 1: Zahlengerade',
+            type: 'numberLine',
+            min: 40,
+            max: 140,
+            step: 5,
+            labelEvery: 20
+        };
+    },
+
+    testNumberLineScale: () => {
+        const tasks = [
+            { values: [45, 30, 15, 5, 70], answer: 5, max: 80 },
+            { values: [4, 12, 44, 32, 28, 56], answer: 4, max: 60 }
+        ];
+        const task = tasks[Math.floor(Math.random() * tasks.length)];
+        return {
+            question: `Zeichne eine passende Zahlengerade und trage nacheinander ein: ${task.values.join(', ')}.`,
+            answer: task.answer,
+            topic: 'Klassenarbeit 1: Zahlengerade',
+            type: 'numberLineTargets',
+            min: 0,
+            max: task.max,
+            labelEvery: 20,
+            targetValues: task.values,
+            hint: 'Achte darauf, dass alle Zahlen auf einem Strich liegen.'
+        };
+    },
+
+    testExpression: () => {
+        const tasks = [
+            { text: 'Bilde die Differenz von 874 und 75.', expression: '874 - 75', answer: 799 },
+            { text: 'Addiere 25 zum Produkt aus 12 und 2.', expression: '12 × 2 + 25', answer: 49 },
+            { text: 'Subtrahiere 22 von der Summe aus 18 und 16.', expression: '(18 + 16) - 22', acceptedExpressions: ['18 + 16 - 22'], answer: 12 },
+            { text: 'Addiere 7 zum Produkt aus 11 und 5.', expression: '11 × 5 + 7', answer: 62 },
+            { text: 'Multipliziere die Differenz von 11 und 4 mit der Summe aus 5 und 6.', expression: '(11 - 4) × (5 + 6)', answer: 77 },
+            { text: 'Addiere die Summe aus 5 und 56 zu 20.', expression: '20 + (5 + 56)', acceptedExpressions: ['20 + 5 + 56'], answer: 81 },
+            { text: 'Bilde den Quotienten von 88 und 4.', expression: '88 : 4', answer: 22 }
+        ];
+        const task = tasks[Math.floor(Math.random() * tasks.length)];
+        return {
+            question: `${task.text} Schreibe den Rechenausdruck auf und berechne.`,
+            answer: task.answer,
+            topic: 'Klassenarbeit 1: Rechenausdrücke',
+            type: 'expression'
+        };
+    },
+
+    testWordProblem: () => {
+        const tasks = [
+            {
+                question: 'Bei einem Telefon sind die Zifferntasten 0 bis 9 mit je drei Funktionen belegt. Wie viele verschiedene Funktionen gibt es insgesamt?',
+                answer: 30
+            },
+            {
+                question: 'In einem Kino gibt es 26 Sitzreihen mit je 18 Sitzplätzen. Wie viele Sitzplätze hat das Kino insgesamt?',
+                answer: 468
+            },
+            {
+                question: 'Thomas spart auf ein Skateboard für 99 €. Er hat schon 47 € und bekommt zum Geburtstag 20 € dazu. Er spart jede Woche 5 €. Wie viele Wochen muss er noch sparen?',
+                answer: 7
+            }
+        ];
+        const task = tasks[Math.floor(Math.random() * tasks.length)];
+        return {
+            ...task,
+            topic: 'Klassenarbeit 1: Sachaufgabe',
+            type: 'input'
+        };
+    },
     
     // Überschlagsrechnung
     estimation: () => {
@@ -803,6 +926,18 @@ function startTraining(topic) {
 function generateExerciseSet(topic, count) {
     const exercises = [];
     const baseDifficulty = difficultyPools[state.currentDifficulty] || difficultyPools.mittel;
+
+    if (topic === 'testPrep') {
+        return [
+            'testRounding',
+            'testNumberWords',
+            'testNumberProperties',
+            'testNumberLine',
+            'testNumberLineScale',
+            'testExpression',
+            'testWordProblem'
+        ].map(type => exerciseGenerators[type]());
+    }
     
     const topicMappings = {
         'addition': ['addition', 'subtraction'],
@@ -849,17 +984,38 @@ function loadExercise() {
     
     document.getElementById('current-topic').textContent = exercise.topic;
     document.getElementById('task-number').textContent = state.currentIndex + 1;
+    document.getElementById('task-total').textContent = state.exerciseSet.length;
     document.getElementById('question').textContent = exercise.question;
+    state.selectedNumberLineValue = null;
+    state.selectedNumberLineScale = null;
+    state.selectedNumberLineValues = [];
     
     const progress = ((state.currentIndex + 1) / state.exerciseSet.length) * 100;
     document.getElementById('exercise-progress-bar').style.width = `${progress}%`;
     
     // Setup answer input
-    if (exercise.type === 'input') {
+    const numberLineContainer = document.getElementById('number-line-answer-container');
+    const expressionContainer = document.getElementById('expression-answer-container');
+    numberLineContainer.classList.add('hidden');
+    expressionContainer.classList.add('hidden');
+    if (exercise.type === 'numberLine') {
+        document.getElementById('answer-input-container').classList.add('hidden');
+        document.getElementById('answer-choices').classList.add('hidden');
+        state.selectedNumberLineValue = null;
+        renderNumberLine(exercise);
+        numberLineContainer.classList.remove('hidden');
+    } else if (exercise.type === 'input') {
         document.getElementById('answer-input-container').classList.remove('hidden');
         document.getElementById('answer-choices').classList.add('hidden');
         document.getElementById('answer-input').value = '';
         document.getElementById('answer-input').focus();
+    } else if (exercise.type === 'expression') {
+        document.getElementById('answer-input-container').classList.add('hidden');
+        document.getElementById('answer-choices').classList.add('hidden');
+        document.getElementById('expression-input').value = '';
+        document.getElementById('expression-result-input').value = '';
+        expressionContainer.classList.remove('hidden');
+        document.getElementById('expression-input').focus();
     } else {
         document.getElementById('answer-input-container').classList.add('hidden');
         document.getElementById('answer-choices').classList.remove('hidden');
@@ -869,6 +1025,113 @@ function loadExercise() {
     document.getElementById('feedback').classList.add('hidden');
     document.getElementById('check-btn').classList.remove('hidden');
     document.getElementById('next-btn').classList.add('hidden');
+}
+
+function renderNumberLine(exercise) {
+    const container = document.getElementById('number-line');
+    const instruction = document.getElementById('number-line-instruction');
+    container.innerHTML = '';
+    instruction.style.marginBottom = '12px';
+
+    if (exercise.type === 'numberLineTargets') {
+        instruction.textContent = 'Wähle zuerst die Schrittweite.';
+        const options = document.createElement('div');
+        options.style.display = 'flex';
+        options.style.gap = '8px';
+        options.style.marginBottom = '12px';
+        [4, 5].forEach(step => {
+            const option = document.createElement('button');
+            option.type = 'button';
+            option.textContent = `${step}er-Schritte`;
+            option.style.padding = '8px 12px';
+            option.style.border = '1px solid #94a3b8';
+            option.style.borderRadius = '6px';
+            option.style.background = '#fff';
+            option.style.cursor = 'pointer';
+            option.addEventListener('click', () => {
+                state.selectedNumberLineScale = step;
+                state.selectedNumberLineValues = [];
+                options.querySelectorAll('button').forEach(button => {
+                    button.style.background = button === option ? '#ccfbf1' : '#fff';
+                });
+                instruction.textContent = `Markiere ${exercise.targetValues[0]} auf der Zahlengeraden.`;
+                renderNumberLineTicks(exercise, step);
+            });
+            options.appendChild(option);
+        });
+        container.appendChild(options);
+        return;
+    }
+
+    instruction.textContent = 'Wähle den passenden Strich.';
+    renderNumberLineTicks(exercise, exercise.step);
+}
+
+function renderNumberLineTicks(exercise, step) {
+    const container = document.getElementById('number-line');
+    container.querySelectorAll('.number-line-scale').forEach(line => line.remove());
+
+    const scale = document.createElement('div');
+    scale.className = 'number-line-scale';
+    scale.style.display = 'flex';
+    scale.style.alignItems = 'stretch';
+    scale.style.width = '100%';
+    scale.style.minHeight = '48px';
+    scale.style.borderBottom = '2px solid #334155';
+
+    for (let value = exercise.min; value <= exercise.max; value += step) {
+        const tick = document.createElement('button');
+        tick.type = 'button';
+        tick.setAttribute('aria-label', String(value));
+        tick.title = String(value);
+        tick.style.flex = '1 1 0';
+        tick.style.minWidth = '0';
+        tick.style.padding = '0';
+        tick.style.border = '0';
+        tick.style.background = 'transparent';
+        tick.style.cursor = 'pointer';
+        tick.style.display = 'flex';
+        tick.style.flexDirection = 'column';
+        tick.style.alignItems = 'center';
+        tick.style.justifyContent = 'flex-end';
+
+        const mark = document.createElement('span');
+        mark.style.height = (value - exercise.min) % exercise.labelEvery === 0 ? '18px' : '9px';
+        mark.style.borderLeft = '2px solid #334155';
+        tick.appendChild(mark);
+
+        const label = document.createElement('span');
+        label.textContent = (value - exercise.min) % exercise.labelEvery === 0 ? value : '';
+        label.style.fontSize = '12px';
+        label.style.lineHeight = '18px';
+        label.style.whiteSpace = 'nowrap';
+        tick.appendChild(label);
+
+        tick.addEventListener('click', () => {
+            if (exercise.type === 'numberLineTargets') {
+                const placedValues = state.selectedNumberLineValues;
+                if (placedValues.length >= exercise.targetValues.length) return;
+                placedValues.push(value);
+                tick.style.background = '#ccfbf1';
+                tick.setAttribute('aria-pressed', 'true');
+                const nextIndex = placedValues.length;
+                document.getElementById('number-line-instruction').textContent = nextIndex < exercise.targetValues.length
+                    ? `Markiere ${exercise.targetValues[nextIndex]} auf der Zahlengeraden (${nextIndex + 1}/${exercise.targetValues.length}).`
+                    : 'Alle Zahlen sind eingetragen. Prüfe deine Lösung.';
+            } else {
+                scale.querySelectorAll('button').forEach(button => {
+                    button.style.background = 'transparent';
+                    button.removeAttribute('aria-pressed');
+                });
+                tick.style.background = '#ccfbf1';
+                tick.setAttribute('aria-pressed', 'true');
+                state.selectedNumberLineValue = value;
+            }
+        });
+        scale.appendChild(tick);
+    }
+
+    container.appendChild(scale);
 }
 
 // Render Choices
@@ -893,8 +1156,33 @@ function checkAnswer() {
     syncWeeklyProgress();
     updateUI();
     let userAnswer;
+    let userExpression = '';
     
-    if (state.currentExercise.type === 'input') {
+    if (state.currentExercise.type === 'numberLine') {
+        if (state.selectedNumberLineValue === null || state.selectedNumberLineValue === undefined) {
+            showFeedback(false, 'Bitte markiere zuerst einen Strich auf der Zahlengeraden.');
+            return;
+        }
+        userAnswer = state.selectedNumberLineValue;
+    } else if (state.currentExercise.type === 'numberLineTargets') {
+        if (state.selectedNumberLineScale === null || state.selectedNumberLineScale === undefined) {
+            showFeedback(false, 'Bitte wähle zuerst eine Schrittweite.');
+            return;
+        }
+        if (state.selectedNumberLineValues.length !== state.currentExercise.targetValues.length) {
+            showFeedback(false, 'Bitte trage erst alle Zahlen auf der Zahlengeraden ein.');
+            return;
+        }
+        userAnswer = state.selectedNumberLineScale;
+    } else if (state.currentExercise.type === 'expression') {
+        userExpression = document.getElementById('expression-input').value.trim();
+        const raw = document.getElementById('expression-result-input').value.trim();
+        if (userExpression === '' || raw === '') {
+            showFeedback(false, 'Bitte gib den Rechenausdruck und das Ergebnis ein!');
+            return;
+        }
+        userAnswer = parseFloat(raw.replace(',', '.'));
+    } else if (state.currentExercise.type === 'input') {
         const raw = document.getElementById('answer-input').value.trim();
         if (raw === '') {
             showFeedback(false, 'Bitte gib eine Antwort ein!');
@@ -911,9 +1199,14 @@ function checkAnswer() {
     }
     
     const ex = state.currentExercise;
-    const correct = typeof ex.accept === 'function'
-        ? ex.accept(userAnswer)
-        : userAnswer === ex.answer;
+    const correct = ex.type === 'numberLineTargets'
+        ? userAnswer === ex.answer && ex.targetValues.every((value, index) => state.selectedNumberLineValues[index] === value)
+        : ex.type === 'expression'
+            ? userAnswer === ex.answer && [ex.expression, ...(ex.acceptedExpressions || [])].some(expression =>
+                normalizeExpression(expression) === normalizeExpression(userExpression))
+        : typeof ex.accept === 'function'
+            ? ex.accept(userAnswer)
+            : userAnswer === ex.answer;
     
     if (correct) {
         const points = 20;
@@ -943,7 +1236,10 @@ function checkAnswer() {
         
         showFeedback(true, `🎉 Richtig! +${points} Punkte`);
     } else {
-        showFeedback(false, `❌ Leider falsch. Die richtige Antwort ist ${state.currentExercise.answer}`);
+        const expectedAnswer = state.currentExercise.type === 'expression'
+            ? `${state.currentExercise.expression} = ${state.currentExercise.answer}`
+            : state.currentExercise.answer;
+        showFeedback(false, `❌ Leider falsch. Die richtige Antwort ist ${expectedAnswer}`);
     }
     
     document.getElementById('check-btn').classList.add('hidden');
@@ -951,6 +1247,13 @@ function checkAnswer() {
     
     saveState();
     updateUI();
+}
+
+function normalizeExpression(expression) {
+    return expression
+        .replace(/\s+/g, '')
+        .replace(/[×·]/g, '*')
+        .replace(/[÷:]/g, '/');
 }
 
 // Show Feedback

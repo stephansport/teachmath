@@ -157,6 +157,13 @@
                     <p>Überschlag, Fehler finden, Platzhalter</p>
                     <div class="topic-progress" style="background: gold; color: #000;">Herausforderung</div>
                 </div>
+
+                <div class="topic-card" data-topic="testPrep" style="border: 3px solid #0f766e; background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);">
+                    <div class="topic-icon">📝</div>
+                    <h3>Vorbereitung Klassenarbeit 1</h3>
+                    <p>Runden, Zahlen, Zahlengerade und Sachaufgaben</p>
+                    <div class="topic-progress" style="background: #0f766e; color: #fff;">7 Aufgabentypen</div>
+                </div>
                 
                 <div class="topic-card" id="adventure-card" style="border: 3px solid #f59e0b; background: linear-gradient(135deg, #1e293b 0%, #0f2744 100%); cursor: pointer;">
                     <div class="topic-icon">🏴‍☠️</div>
@@ -210,7 +217,7 @@
                 <div class="exercise-header">
                     <div class="exercise-info">
                         <span class="exercise-topic" id="current-topic">Addition</span>
-                        <span class="exercise-number">Aufgabe <span id="task-number">1</span>/5</span>
+                        <span class="exercise-number">Aufgabe <span id="task-number">1</span>/<span id="task-total">5</span></span>
                     </div>
                     <button id="quit-btn" class="btn-small">❌ Beenden</button>
                 </div>
@@ -225,9 +232,21 @@
                     <div id="answer-input-container" class="answer-container">
                         <input type="number" id="answer-input" class="answer-input" placeholder="Deine Antwort">
                     </div>
+
+                    <div id="expression-answer-container" class="answer-container hidden">
+                        <label for="expression-input">Rechenausdruck</label>
+                        <input type="text" id="expression-input" class="answer-input" placeholder="z. B. 12 × 2 + 25">
+                        <label for="expression-result-input">Ergebnis</label>
+                        <input type="number" id="expression-result-input" class="answer-input" placeholder="Ergebnis">
+                    </div>
                     
                     <div id="answer-choices" class="answer-choices hidden">
                         <!-- Multiple choice buttons will be inserted here -->
+                    </div>
+
+                    <div id="number-line-answer-container" class="hidden">
+                        <p id="number-line-instruction"></p>
+                        <div id="number-line"></div>
                     </div>
                 </div>
 
