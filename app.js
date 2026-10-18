@@ -516,121 +516,202 @@ const exerciseGenerators = {
         };
     },
 
-    testRounding: () => {
-        const tasks = [
-            { value: 958, place: 'auf Hunderter', unit: 100 },
-            { value: 40812, place: 'auf Hunderter', unit: 100 },
-            { value: 3394, place: 'auf Hunderter', unit: 100 },
-            { value: 19586, place: 'auf Zehntausender', unit: 10000 },
-            { value: 24999, place: 'auf Zehntausender', unit: 10000 },
-            { value: 80053, place: 'auf Zehntausender', unit: 10000 },
-            { question: 'Welche kleinste Zahl wird auf Tausender gerundet zu 3000?', answer: 2500 },
-            { question: 'Welche größte Zahl wird auf Tausender gerundet zu 3000?', answer: 3499 }
+    testRounding: (practice = false) => {
+        const tasks = practice ? [
+            { value: 263, place: 'auf Zehner', unit: 10 },
+            { value: 847, place: 'auf Zehner', unit: 10 },
+            { value: 1256, place: 'auf Zehner', unit: 10 },
+            { value: 7384, place: 'auf Zehner', unit: 10 },
+            { value: 3427, place: 'auf Tausender', unit: 1000 },
+            { value: 18650, place: 'auf Tausender', unit: 1000 },
+            { value: 74201, place: 'auf Tausender', unit: 1000 },
+            { value: 315672, place: 'auf Tausender', unit: 1000 },
+            { question: 'Auf welche Zahl wird 62 347 auf Zehner gerundet?', answer: 62350 },
+            { question: 'Auf welche Zahl wird 62 347 auf Hunderter gerundet?', answer: 62300 },
+            { question: 'Auf welche Zahl wird 62 347 auf Tausender gerundet?', answer: 62000 },
+            {
+                question: 'Welche Zahlen ergeben auf Zehner gerundet 2000?',
+                answer: 0,
+                choices: ['1995 bis 2004', '1990 bis 2010', '1995 bis 2005', '1999 bis 2001'],
+                correctChoice: '1995 bis 2004'
+            },
+            { question: 'Wie viele natürliche Zahlen ergeben auf Hunderter gerundet 2000?', answer: 100 }
+        ] : [
+            { value: 142, place: 'auf Zehner', unit: 10 },
+            { value: 705, place: 'auf Zehner', unit: 10 },
+            { value: 398, place: 'auf Zehner', unit: 10 },
+            { value: 4214, place: 'auf Zehner', unit: 10 },
+            { value: 5612, place: 'auf Tausender', unit: 1000 },
+            { value: 12455, place: 'auf Tausender', unit: 1000 },
+            { value: 60500, place: 'auf Tausender', unit: 1000 },
+            { value: 229968, place: 'auf Tausender', unit: 1000 },
+            { question: 'Auf welche Zahl wird 45 098 auf Zehner gerundet?', answer: 45100 },
+            { question: 'Auf welche Zahl wird 45 098 auf Hunderter gerundet?', answer: 45100 },
+            { question: 'Auf welche Zahl wird 45 098 auf Tausender gerundet?', answer: 45000 },
+            {
+                question: 'Welche Zahlen ergeben auf Zehner gerundet 1000?',
+                answer: 0,
+                choices: ['995 bis 1004', '990 bis 1010', '995 bis 1005', '999 bis 1001'],
+                correctChoice: '995 bis 1004'
+            },
+            { question: 'Wie viele natürliche Zahlen ergeben auf Hunderter gerundet 1000?', answer: 100 }
         ];
         const task = tasks[Math.floor(Math.random() * tasks.length)];
         return {
             question: task.question || `Runde ${task.value.toLocaleString('de-DE')} ${task.place}.`,
             answer: task.answer ?? Math.round(task.value / task.unit) * task.unit,
+            choices: task.choices,
+            accept: task.correctChoice ? answer => answer === task.correctChoice : undefined,
             topic: 'Klassenarbeit 1: Runden',
-            type: 'input'
+            type: task.choices ? 'choice' : 'input'
         };
     },
 
-    testNumberWords: () => {
-        const tasks = [
-            { words: 'Dreihundert Millionen zweitausendsiebenhundertsechsunddreißig', answer: 300002736 },
-            { words: 'Zweiundzwanzig Milliarden neuntausend', answer: 22000009000 }
+    testNumberWords: (practice = false) => {
+        const tasks = practice ? [
+            { words: 'Vierhundertachtunddreißig Millionen siebenhundertzwanzigtausendsechshundertfünf', answer: 438720605 },
+            { words: 'Neun Milliarden zweihundert Millionen dreißigtausendvierzig', answer: 9200030040 }
+        ] : [
+            { words: 'Neunhundertsiebenundzwanzig Millionen dreihundertfünfundvierzigtausendvierhundertzwölf', answer: 927345412 },
+            { words: 'Sechs Milliarden sechs Millionen sechstausendsechshundertsechs', answer: 6006006606 }
         ];
         const task = tasks[Math.floor(Math.random() * tasks.length)];
         return {
-            question: `Schreibe die Zahl in Ziffern: ${task.words}`,
+            question: task.question || `Schreibe die Zahl in Ziffern: ${task.words}`,
             answer: task.answer,
             topic: 'Klassenarbeit 1: Zahlwörter',
             type: 'input'
         };
     },
 
-    testNumberProperties: () => {
-        const tasks = [
-            { question: 'Bilde die größte sechsstellige Zahl, die genau drei Nullen enthält.', answer: 999000 },
-            { question: 'Bilde die kleinste siebenstellige Zahl, die genau vier Neunen enthält.', answer: 1009999 }
+    testNumberProperties: (practice = false) => {
+        const tasks = practice ? [
+            { question: 'Welche Zahl musst du von 20 000 abziehen, um 640 zu erhalten?', answer: 19360 },
+            { question: 'Mit welcher Zahl musst du 23 multiplizieren, um 6 900 zu erhalten?', answer: 300 },
+            { question: 'Wie viel fehlt von 1 234 bis zu einer Million?', answer: 998766 }
+        ] : [
+            { question: 'Welche Zahl musst du von 10 000 abziehen, um 325 zu erhalten?', answer: 9675 },
+            { question: 'Mit welcher Zahl musst du 17 multiplizieren, um 5100 zu erhalten?', answer: 300 },
+            { question: 'Wie viel fehlt von 987 bis zu einer Million?', answer: 999013 }
         ];
         const task = tasks[Math.floor(Math.random() * tasks.length)];
         return {
             ...task,
-            topic: 'Klassenarbeit 1: Stellenwerte',
+            topic: 'Klassenarbeit 1: Umkehraufgaben',
             type: 'input'
         };
     },
 
-    testNumberLine: () => {
-        const targets = [45, 75, 80, 105, 130];
-        const target = targets[Math.floor(Math.random() * targets.length)];
-        return {
-            question: `Markiere ${target} auf der Zahlengeraden.`,
-            answer: target,
-            topic: 'Klassenarbeit 1: Zahlengerade',
-            type: 'numberLine',
-            min: 40,
-            max: 140,
-            step: 5,
-            labelEvery: 20
-        };
-    },
-
-    testNumberLineScale: () => {
-        const tasks = [
-            { values: [45, 30, 15, 5, 70], answer: 5, max: 80 },
-            { values: [4, 12, 44, 32, 28, 56], answer: 4, max: 60 }
+    testArithmetic: (practice = false) => {
+        const tasks = practice ? [
+            { question: 'Berechne schriftlich: 36 418 + 27 563', answer: 63981, solution: '36 418 + 27 563 = (36 000 + 27 000) + (418 + 563) = 63 000 + 981 = 63 981.' },
+            { question: 'Berechne schriftlich: 820 405 - 7 238', answer: 813167, solution: '820 405 - 7 000 = 813 405; 813 405 - 238 = 813 167.' },
+            { question: 'Berechne schriftlich: 6 034 · 520', answer: 3137680, solution: '6 034 · 520 = 6 034 · (500 + 20) = 3 017 000 + 120 680 = 3 137 680.' },
+            { question: 'Berechne schriftlich: 53 206 - 38 419', answer: 14787, solution: '53 206 - 38 000 = 15 206; 15 206 - 419 = 14 787.' },
+            { question: 'Berechne schriftlich: 84 516 + 13 278', answer: 97794, solution: '84 516 + 13 278 = (84 000 + 13 000) + (516 + 278) = 97 000 + 794 = 97 794.' },
+            { question: 'Berechne schriftlich: 31 842 - 8 756', answer: 23086, solution: '31 842 - 8 000 = 23 842; 23 842 - 756 = 23 086.' },
+            { question: 'Berechne schriftlich: 638 · 27', answer: 17226, solution: '638 · 27 = 638 · (20 + 7) = 12 760 + 4 466 = 17 226.' },
+            { question: 'Berechne schriftlich: 5 880 : 24', answer: 245, solution: '24 · 200 = 4 800; Rest: 1 080. 24 · 40 = 960; Rest: 120. 24 · 5 = 120. Also 5 880 : 24 = 200 + 40 + 5 = 245.' }
+        ] : [
+            { question: 'S. 35, Aufgabe 4a: Berechne schriftlich: 28 234 + 37 012', answer: 65246, solution: '28 234 + 37 012 = (28 000 + 37 000) + (234 + 12) = 65 000 + 246 = 65 246.' },
+            { question: 'S. 35, Aufgabe 4b: Berechne schriftlich: 700 308 - 6 666', answer: 693642, solution: '700 308 - 6 000 = 694 308; - 600 = 693 708; - 60 = 693 648; - 6 = 693 642.' },
+            { question: 'S. 35, Aufgabe 4e: Berechne schriftlich: 5 021 · 780', answer: 3916380, solution: '5 021 · 780 = 5 021 · (700 + 80) = 3 514 700 + 401 680 = 3 916 380.' },
+            { question: 'S. 35, Aufgabe 4f: Berechne schriftlich: 41 587 - 29 742', answer: 11845, solution: '41 587 - 29 000 = 12 587; 12 587 - 742 = 11 845.' },
+            { question: 'S. 37, Runde 1, Aufgabe 4a: Berechne schriftlich: 95 234 + 20 767', answer: 116001, solution: '95 234 + 20 767 = (95 000 + 20 000) + (234 + 767) = 115 000 + 1 001 = 116 001.' },
+            { question: 'S. 37, Runde 1, Aufgabe 4b: Berechne schriftlich: 23 575 - 9 091', answer: 14484, solution: '23 575 - 9 000 = 14 575; 14 575 - 91 = 14 484.' },
+            { question: 'S. 37, Runde 1, Aufgabe 4c: Berechne schriftlich: 452 · 23', answer: 10396, solution: '452 · 23 = 452 · (20 + 3) = 9 040 + 1 356 = 10 396.' },
+            { question: 'S. 37, Runde 1, Aufgabe 4d: Berechne schriftlich: 4 410 : 18', answer: 245, solution: '18 · 200 = 3 600; Rest: 810. 18 · 40 = 720; Rest: 90. 18 · 5 = 90. Also 4 410 : 18 = 200 + 40 + 5 = 245.' }
         ];
         const task = tasks[Math.floor(Math.random() * tasks.length)];
         return {
-            question: `Zeichne eine passende Zahlengerade und trage nacheinander ein: ${task.values.join(', ')}.`,
-            answer: task.answer,
+            ...task,
+            topic: 'Klassenarbeit 1: Grundrechenarten',
+            type: 'input',
+            hint: 'Achte auf die Rechenzeichen und überprüfe dein Ergebnis mit der Umkehraufgabe.'
+        };
+    },
+
+    testNumberLine: (practice = false) => {
+        const tasks = practice ? [
+            { values: [32, 7, 19, 24, 11, 16, 27], min: 0, max: 35, step: 1 },
+            { values: [635, 760, 665, 700, 745, 720], min: 600, max: 780, step: 5 },
+            { values: [20, 35, 55, 85, 95], min: 0, max: 100, step: 5 },
+            { values: [2240, 2280, 2300, 2350, 2380, 2420], min: 2200, max: 2450, step: 10 },
+            { values: [25, 140, 10, 95, 50, 125, 105, 75], min: 0, max: 150, step: 5 },
+            { values: [501, 538, 515, 534, 508, 530, 511], min: 500, max: 540, step: 1 }
+        ] : [
+            { values: [28, 5, 17, 20, 8, 14, 23], min: 0, max: 30, step: 1 },
+            { values: [455, 580, 485, 500, 545, 520], min: 450, max: 600, step: 5 },
+            { values: [15, 25, 45, 75, 90], min: 0, max: 100, step: 5 },
+            { values: [1250, 1280, 1300, 1350, 1380, 1420], min: 1200, max: 1450, step: 10 },
+            { values: [15, 130, 5, 85, 40, 115, 95, 65], min: 0, max: 140, step: 5 },
+            { values: [401, 428, 415, 424, 408, 420, 411], min: 400, max: 430, step: 1 }
+        ];
+        const task = tasks[Math.floor(Math.random() * tasks.length)];
+        return {
+            question: `Zeichne eine passende Zahlengerade und trage ein: ${task.values.join(', ')}.`,
+            answer: task.step,
             topic: 'Klassenarbeit 1: Zahlengerade',
             type: 'numberLineTargets',
-            min: 0,
+            min: task.min,
             max: task.max,
+            step: task.step,
             labelEvery: 20,
             targetValues: task.values,
             hint: 'Achte darauf, dass alle Zahlen auf einem Strich liegen.'
         };
     },
 
-    testExpression: () => {
-        const tasks = [
-            { text: 'Bilde die Differenz von 874 und 75.', expression: '874 - 75', answer: 799 },
-            { text: 'Addiere 25 zum Produkt aus 12 und 2.', expression: '12 × 2 + 25', answer: 49 },
-            { text: 'Subtrahiere 22 von der Summe aus 18 und 16.', expression: '(18 + 16) - 22', acceptedExpressions: ['18 + 16 - 22'], answer: 12 },
-            { text: 'Addiere 7 zum Produkt aus 11 und 5.', expression: '11 × 5 + 7', answer: 62 },
-            { text: 'Multipliziere die Differenz von 11 und 4 mit der Summe aus 5 und 6.', expression: '(11 - 4) × (5 + 6)', answer: 77 },
-            { text: 'Addiere die Summe aus 5 und 56 zu 20.', expression: '20 + (5 + 56)', acceptedExpressions: ['20 + 5 + 56'], answer: 81 },
-            { text: 'Bilde den Quotienten von 88 und 4.', expression: '88 : 4', answer: 22 }
-        ];
-        const task = tasks[Math.floor(Math.random() * tasks.length)];
-        return {
-            question: `${task.text} Schreibe den Rechenausdruck auf und berechne.`,
-            expression: task.expression,
-            acceptedExpressions: task.acceptedExpressions || [],
-            answer: task.answer,
-            topic: 'Klassenarbeit 1: Rechenausdrücke',
-            type: 'expression'
-        };
-    },
-
-    testWordProblem: () => {
-        const tasks = [
+    testWordProblem: (practice = false) => {
+        const tasks = practice ? [
             {
-                question: 'Bei einem Telefon sind die Zifferntasten 0 bis 9 mit je drei Funktionen belegt. Wie viele verschiedene Funktionen gibt es insgesamt?',
-                answer: 30
+                question: 'Zwei Erwachsenenräder kosten 9 € pro Tag, drei Kinderräder 6 € pro Tag. Die Fahrräder werden Samstag und Sonntag gemietet. Wie viel kostet die Miete ohne Wochenendangebot?',
+                answer: 72
             },
             {
-                question: 'In einem Kino gibt es 26 Sitzreihen mit je 18 Sitzplätzen. Wie viele Sitzplätze hat das Kino insgesamt?',
-                answer: 468
+                question: 'Die normale Fahrradmiete am Wochenende kostet 72 €. Das Wochenendangebot kostet 39 €. Wie viel spart die Familie?',
+                answer: 33
             },
             {
-                question: 'Thomas spart auf ein Skateboard für 99 €. Er hat schon 47 € und bekommt zum Geburtstag 20 € dazu. Er spart jede Woche 5 €. Wie viele Wochen muss er noch sparen?',
-                answer: 7
+                question: 'In einem Stadion sind 120 000 Zuschauer. Wie viele Autos werden benötigt, wenn in jedem Auto vier Personen sitzen?',
+                answer: 30000
+            },
+            {
+                question: 'Wie viele Busse mit je 60 Plätzen werden für 120 000 Zuschauer benötigt?',
+                answer: 2000
+            },
+            {
+                question: 'Wie viele Züge mit je 1 200 Plätzen werden für 120 000 Zuschauer benötigt?',
+                answer: 100
+            },
+            {
+                question: 'Zwei Erwachsene und drei Kinder zahlen zusammen 56 €. Eine Kinderkarte kostet halb so viel wie eine Erwachsenenkarte. Wie viel kostet eine Erwachsenenkarte?',
+                answer: 16
+            }
+        ] : [
+            {
+                question: 'S. 35, Aufgabe 6: Zwei Erwachsenenräder und drei Kinderräder werden für Samstag und Sonntag gemietet. Erwachsene zahlen 8 € pro Tag, Kinder 5 € pro Tag. Wie viel kostet die Fahrradmiete ohne Familienangebot?',
+                answer: 62
+            },
+            {
+                question: 'S. 35, Aufgabe 6: Die normale Fahrradmiete am Wochenende kostet 62 €. Das Familienangebot kostet 33 €. Wie viel spart die Familie?',
+                answer: 29
+            },
+            {
+                question: 'S. 35, Aufgabe 11a: In einem Stadion sind 100 000 Zuschauer. Wie viele Autos werden benötigt, wenn in jedem Auto vier Personen sitzen?',
+                answer: 25000
+            },
+            {
+                question: 'S. 35, Aufgabe 11b: Wie viele Busse mit je 50 Plätzen werden für 100 000 Zuschauer benötigt?',
+                answer: 2000
+            },
+            {
+                question: 'S. 35, Aufgabe 11c: Wie viele Züge mit je 1 000 Plätzen werden für 100 000 Zuschauer benötigt?',
+                answer: 100
+            },
+            {
+                question: 'S. 37, Runde 2, Aufgabe 6: Zwei Erwachsene und drei Kinder zahlen zusammen 49 €. Eine Kinderkarte kostet halb so viel wie eine Erwachsenenkarte. Wie viel kostet eine Erwachsenenkarte?',
+                answer: 14
             }
         ];
         const task = tasks[Math.floor(Math.random() * tasks.length)];
@@ -934,11 +1015,21 @@ function generateExerciseSet(topic, count) {
             'testRounding',
             'testNumberWords',
             'testNumberProperties',
+            'testArithmetic',
             'testNumberLine',
-            'testNumberLineScale',
-            'testExpression',
             'testWordProblem'
         ].map(type => exerciseGenerators[type]());
+    }
+
+    if (topic === 'testPrepPractice') {
+        return [
+            'testWordProblem',
+            'testArithmetic',
+            'testNumberLine',
+            'testNumberWords',
+            'testRounding',
+            'testNumberProperties'
+        ].map(type => exerciseGenerators[type](true));
     }
     
     const topicMappings = {
@@ -1035,32 +1126,9 @@ function renderNumberLine(exercise) {
     instruction.style.marginBottom = '12px';
 
     if (exercise.type === 'numberLineTargets') {
-        instruction.textContent = 'Wähle zuerst die Schrittweite.';
-        const options = document.createElement('div');
-        options.style.display = 'flex';
-        options.style.gap = '8px';
-        options.style.marginBottom = '12px';
-        [4, 5].forEach(step => {
-            const option = document.createElement('button');
-            option.type = 'button';
-            option.textContent = `${step}er-Schritte`;
-            option.style.padding = '8px 12px';
-            option.style.border = '1px solid #94a3b8';
-            option.style.borderRadius = '6px';
-            option.style.background = '#fff';
-            option.style.cursor = 'pointer';
-            option.addEventListener('click', () => {
-                state.selectedNumberLineScale = step;
-                state.selectedNumberLineValues = [];
-                options.querySelectorAll('button').forEach(button => {
-                    button.style.background = button === option ? '#ccfbf1' : '#fff';
-                });
-                instruction.textContent = `Markiere ${exercise.targetValues[0]} auf der Zahlengeraden.`;
-                renderNumberLineTicks(exercise, step);
-            });
-            options.appendChild(option);
-        });
-        container.appendChild(options);
+        state.selectedNumberLineScale = exercise.step;
+        instruction.textContent = `Markiere ${exercise.targetValues[0]} auf der Zahlengeraden.`;
+        renderNumberLineTicks(exercise, exercise.step);
         return;
     }
 
@@ -1196,7 +1264,9 @@ function checkAnswer() {
             showFeedback(false, 'Bitte wähle eine Antwort!');
             return;
         }
-        userAnswer = parseInt(selected.textContent);
+        const answerText = selected.textContent.trim();
+        const numericAnswer = Number(answerText);
+        userAnswer = Number.isFinite(numericAnswer) ? numericAnswer : answerText;
     }
     
     const ex = state.currentExercise;
@@ -1212,6 +1282,9 @@ function checkAnswer() {
         : typeof ex.accept === 'function'
             ? ex.accept(userAnswer)
             : userAnswer === ex.answer;
+    const solutionFeedback = ex.solution
+        ? `<br><small>Rechenweg:<br>${ex.solution.replace(/; /g, '<br>')}</small>`
+        : '';
     
     if (correct) {
         const points = 20;
@@ -1239,12 +1312,12 @@ function checkAnswer() {
         checkLevelUp();
         checkAchievements();
         
-        showFeedback(true, `🎉 Richtig! +${points} Punkte`);
+        showFeedback(true, `🎉 Richtig! +${points} Punkte${solutionFeedback}`);
     } else {
         const expectedAnswer = state.currentExercise.type === 'expression'
             ? `${state.currentExercise.expression} = ${state.currentExercise.answer}`
             : state.currentExercise.answer;
-        showFeedback(false, `❌ Leider falsch. Die richtige Antwort ist ${expectedAnswer}`);
+        showFeedback(false, `❌ Leider falsch. Die richtige Antwort ist ${expectedAnswer}${solutionFeedback}`);
     }
     
     document.getElementById('check-btn').classList.add('hidden');
@@ -1257,7 +1330,7 @@ function checkAnswer() {
 function normalizeExpression(expression) {
     return expression
         .replace(/\s+/g, '')
-        .replace(/[×·]/g, '*')
+        .replace(/[×·xX]/g, '*')
         .replace(/[÷:]/g, '/');
 }
 
