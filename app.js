@@ -610,6 +610,8 @@ const exerciseGenerators = {
         const task = tasks[Math.floor(Math.random() * tasks.length)];
         return {
             question: `${task.text} Schreibe den Rechenausdruck auf und berechne.`,
+            expression: task.expression,
+            acceptedExpressions: task.acceptedExpressions || [],
             answer: task.answer,
             topic: 'Klassenarbeit 1: Rechenausdrücke',
             type: 'expression'
@@ -998,10 +1000,9 @@ function loadExercise() {
     const expressionContainer = document.getElementById('expression-answer-container');
     numberLineContainer.classList.add('hidden');
     expressionContainer.classList.add('hidden');
-    if (exercise.type === 'numberLine') {
+    if (exercise.type === 'numberLine' || exercise.type === 'numberLineTargets') {
         document.getElementById('answer-input-container').classList.add('hidden');
         document.getElementById('answer-choices').classList.add('hidden');
-        state.selectedNumberLineValue = null;
         renderNumberLine(exercise);
         numberLineContainer.classList.remove('hidden');
     } else if (exercise.type === 'input') {
@@ -1199,8 +1200,12 @@ function checkAnswer() {
     }
     
     const ex = state.currentExercise;
+    const placedNumberLineValues = [...state.selectedNumberLineValues].sort((a, b) => a - b);
+    const targetNumberLineValues = ex.type === 'numberLineTargets'
+        ? [...ex.targetValues].sort((a, b) => a - b)
+        : [];
     const correct = ex.type === 'numberLineTargets'
-        ? userAnswer === ex.answer && ex.targetValues.every((value, index) => state.selectedNumberLineValues[index] === value)
+        ? userAnswer === ex.answer && placedNumberLineValues.every((value, index) => value === targetNumberLineValues[index])
         : ex.type === 'expression'
             ? userAnswer === ex.answer && [ex.expression, ...(ex.acceptedExpressions || [])].some(expression =>
                 normalizeExpression(expression) === normalizeExpression(userExpression))
