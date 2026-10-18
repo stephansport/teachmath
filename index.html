@@ -172,6 +172,13 @@
                     <p>Dieselben Aufgabentypen mit neuen Zahlen und anderer Reihenfolge</p>
                     <div class="topic-progress" style="background: #0891b2; color: #fff;">Zusätzliche Übung</div>
                 </div>
+
+                <div class="topic-card" id="classwork-adventure-card" style="border: 3px solid #7c3aed; background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%); cursor: pointer;">
+                    <div class="topic-icon">🗝️</div>
+                    <h3>Abenteuer Klassenarbeits-Schloss</h3>
+                    <p>Löse alle Klassenarbeits-Aufgabentypen, um Raum für Raum weiterzukommen!</p>
+                    <div class="topic-progress" style="background: #7c3aed; color: #fff;">6 Prüfungen bis zum Schatz</div>
+                </div>
                 
                 <div class="topic-card" id="adventure-card" style="border: 3px solid #f59e0b; background: linear-gradient(135deg, #1e293b 0%, #0f2744 100%); cursor: pointer;">
                     <div class="topic-icon">🏴‍☠️</div>
@@ -294,6 +301,9 @@
         // Adventure-Karte verlinken
         document.getElementById('adventure-card').addEventListener('click', () => {
             window.location.href = 'adventure.html';
+        });
+        document.getElementById('classwork-adventure-card').addEventListener('click', () => {
+            window.location.href = 'classwork-adventure.html';
         });
         document.getElementById('mountain-card').addEventListener('click', () => {
             window.location.href = 'mountain.html';

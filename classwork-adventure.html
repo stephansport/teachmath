@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Das Klassenarbeits-Schloss</title>
+    <link rel="stylesheet" href="adventure.css">
+    <style>
+        .number-line {
+            display: flex;
+            align-items: stretch;
+            min-height: 58px;
+            width: 100%;
+            border-bottom: 2px solid #cbd5e1;
+            margin: 18px 0;
+        }
+        .number-line button {
+            flex: 1 1 0;
+            min-width: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            border: 0;
+            color: var(--text);
+            background: transparent;
+            cursor: pointer;
+        }
+        .number-line button[aria-pressed="true"] { background: #065f46; }
+        .number-line-tick { height: 12px; border-left: 2px solid #cbd5e1; }
+        .number-line-label { min-height: 18px; font-size: 0.7rem; }
+        .answer-field {
+            flex: 1;
+            min-width: 0;
+            padding: 14px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 1.2rem;
+            text-align: center;
+        }
+        .answer-field:focus { outline: none; border-color: var(--primary); }
+        .checkpoint-list { display: flex; justify-content: space-between; gap: 6px; margin: 0 0 18px; }
+        .checkpoint { opacity: 0.45; font-size: 1.25rem; }
+        .checkpoint.active, .checkpoint.done { opacity: 1; }
+        .checkpoint.done { color: var(--success); }
+        .return-link { display: inline-block; color: var(--muted); margin-top: 16px; }
+        @media (max-width: 480px) {
+            .number-line-label { font-size: 0.6rem; }
+            .number-line button { font-size: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+    <main class="screen active">
+        <section class="title-card" id="start-screen">
+            <div class="title-emoji">🗝️</div>
+            <h1>Das Klassenarbeits-Schloss</h1>
+            <p class="subtitle">Löse sechs Aufgaben aus den Klassenarbeits-Themen. Nur mit der richtigen Lösung öffnet sich der nächste Raum.</p>
+            <button class="btn-primary" id="start-button">Abenteuer beginnen</button>
+            <a class="return-link" href="index.html">Zurück zum Dashboard</a>
+        </section>
+
+        <section class="hidden" id="game-screen">
+            <div class="hud">
+                <strong id="room-counter">Raum 1 von 6</strong>
+                <span class="hud-score">🔑 <span id="key-count">0</span>/6</span>
+            </div>
+            <div class="checkpoint-list" id="checkpoint-list" aria-label="Abenteuerfortschritt"></div>
+            <article class="story-card">
+                <div class="scene-emoji" id="room-icon">🏰</div>
+                <h2 id="room-title"></h2>
+                <p class="story-text" id="room-story"></p>
+                <section class="challenge-box">
+                    <div class="challenge-text" id="question-text"></div>
+                    <div id="numeric-answer" class="challenge-input-row">
+                        <input id="answer-input" class="answer-field" type="text" inputmode="numeric" autocomplete="off" placeholder="Deine Antwort" aria-label="Deine Antwort">
+                    </div>
+                    <div id="number-line-answer" class="hidden">
+                        <p id="number-line-instruction"></p>
+                        <div class="number-line" id="number-line"></div>
+                    </div>
+                    <div class="hint-box" id="hint-box"></div>
+                    <div id="feedback" class="challenge-feedback hidden" aria-live="polite"></div>
+                </section>
+                <div class="btn-row">
+                    <button class="btn-hint" id="hint-button">💡 Tipp</button>
+                    <button class="btn-primary" id="action-button">Prüfen</button>
+                </div>
+            </article>
+        </section>
+
+        <section class="title-card hidden" id="win-screen">
+            <div class="title-emoji">🏆</div>
+            <h1>Das Schloss ist offen!</h1>
+            <p class="subtitle">Du hast alle sechs Klassenarbeits-Aufgabentypen richtig gelöst und den Schatz gefunden!</p>
+            <button class="btn-primary" id="restart-button">Noch einmal spielen</button>
+            <a class="return-link" href="index.html">Zurück zum Dashboard</a>
+        </section>
+    </main>
+    <script src="classwork-adventure.js"></script>
+</body>
+</html>
