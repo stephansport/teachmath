@@ -1,3 +1,9 @@
+window.recordAdventureWin = function recordAdventureWin() {
+    const key = 'teachmath_adventure_wins';
+    const value = Number(localStorage.getItem(key) || '0') + 1;
+    localStorage.setItem(key, String(value));
+};
+
 const forestAdventure = {
     state: {
         currentScene: 'start',
@@ -434,6 +440,9 @@ const forestUi = {
     },
 
     winGame() {
+        if (typeof window !== 'undefined' && typeof window.recordAdventureWin === 'function') {
+            window.recordAdventureWin();
+        }
         document.getElementById('win-score').textContent = forestAdventure.state.score;
         document.getElementById('win-text').textContent = `${this.playerName}, du hast das Tal gerettet und die Bachglocke wieder zum Klingen gebracht.`;
         this.showScreen('screen-win');

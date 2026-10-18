@@ -5,6 +5,10 @@ const state = {
     points: 0,
     level: 1,
     streak: 0,
+    currentStreak: 0,
+    bestStreak: 0,
+    cleanRunStreak: 0,
+    completedAdventures: 0,
     dailyProgress: 0,
     totalSolved: 0,
     weeklyGoal: 10,
@@ -35,12 +39,16 @@ const achievements = [
     { id: 'level_3', name: 'Fortgeschritten', desc: 'Level 3 erreicht', icon: '🚀', unlocked: false },
     { id: 'level_5', name: 'Experte', desc: 'Level 5 erreicht', icon: '🤓', unlocked: false },
     { id: 'perfect_5', name: 'Perfekt!', desc: '5 richtige hintereinander', icon: '💯', unlocked: false },
+    { id: 'perfect_10', name: 'Super-Serie', desc: '10 richtige hintereinander', icon: '🏅', unlocked: false },
     { id: 'geometry_master', name: 'Geometrie-Profi', desc: '10 Geometrie-Aufgaben', icon: '🔺', unlocked: false },
     { id: 'word_wizard', name: 'Textaufgaben-Held', desc: '10 Sachaufgaben', icon: '📖', unlocked: false },
     { id: 'conversion_king', name: 'Umrechnungs-König', desc: '10 Umrechnungen', icon: '📍', unlocked: false },
     { id: 'math_master', name: 'Mathe-Meister', desc: '100 Aufgaben gelöst', icon: '👑', unlocked: false },
     { id: 'speed_demon', name: 'Blitzrechner', desc: '20 Aufgaben in einer Session', icon: '⚡', unlocked: false },
-    { id: 'all_topics', name: 'Allrounder', desc: 'Alle Themen ausprobiert', icon: '🎓', unlocked: false }
+    { id: 'speed_legend', name: 'Schnellster Rechner', desc: '30 Aufgaben in einer Session', icon: '🚀', unlocked: false },
+    { id: 'all_topics', name: 'Allrounder', desc: 'Alle Themen ausprobiert', icon: '🎓', unlocked: false },
+    { id: 'adventure_explorer', name: 'Abenteuer-Entdecker', desc: '3 Abenteuer erfolgreich beendet', icon: '🗺️', unlocked: false },
+    { id: 'careful_solver', name: 'Sorgfältiger Löser', desc: 'Ohne Fehler 5 Aufgaben hintereinander richtig', icon: '🧠', unlocked: false }
 ];
 
 const difficultyPools = {
@@ -977,7 +985,6 @@ function startApp() {
     }
     
     state.username = username;
-    state.streak = 0;
     updateLastActive();
     saveState();
     
@@ -993,7 +1000,8 @@ function startTraining(topic) {
     state.currentTopic = topic;
     state.exerciseSet = generateExerciseSet(topic, 5);
     state.currentIndex = 0;
-    state.currentSessionCorrect = 0; // Reset counter
+    state.currentSessionCorrect = state.currentSessionCorrect || 0;
+    state.cleanRunStreak = 0;
     
     // Track tried topics
     if (!state.triedTopics) {
@@ -1292,6 +1300,9 @@ function checkAnswer() {
         state.dailyProgress++;
         state.totalSolved++;
         state.weeklyProgress++;
+        state.currentStreak = (state.currentStreak || 0) + 1;
+        state.bestStreak = Math.max(state.bestStreak || 0, state.currentStreak);
+        state.cleanRunStreak = (state.cleanRunStreak || 0) + 1;
         
         // Track correct answers in current session
         if (!state.currentSessionCorrect) {
@@ -1314,6 +1325,8 @@ function checkAnswer() {
         
         showFeedback(true, `🎉 Richtig! +${points} Punkte${solutionFeedback}`);
     } else {
+        state.currentStreak = 0;
+        state.cleanRunStreak = 0;
         const expectedAnswer = state.currentExercise.type === 'expression'
             ? `${state.currentExercise.expression} = ${state.currentExercise.answer}`
             : state.currentExercise.answer;
@@ -1385,8 +1398,7 @@ function finishTraining() {
         <p>Punkte verdient: <strong>${totalPoints}</strong> ⭐</p>${bossDefeated ? '<p>Du hast den Boss-Kampf perfekt gemeistert!</p>' : ''}`
     );
     
-    // Reset session counter
-    state.currentSessionCorrect = 0;
+    // Keep session counter for the current browser session so achievements like "Blitzrechner" can unlock naturally.
     saveState();
     
     showScreen('dashboard');
@@ -1456,6 +1468,27 @@ function checkAchievements() {
     // Session achievements
     if (state.currentSessionCorrect >= 20) {
         unlockAchievement('speed_demon');
+    }
+
+    if (state.currentSessionCorrect >= 30) {
+        unlockAchievement('speed_legend');
+    }
+
+    // Consecutive correct answers
+    if (state.bestStreak >= 5) {
+        unlockAchievement('perfect_5');
+    }
+
+    if (state.bestStreak >= 10) {
+        unlockAchievement('perfect_10');
+    }
+
+    if (state.cleanRunStreak >= 5) {
+        unlockAchievement('careful_solver');
+    }
+
+    if (state.completedAdventures >= 3) {
+        unlockAchievement('adventure_explorer');
     }
 }
 
@@ -1563,6 +1596,14 @@ function updateUI() {
     document.getElementById('points-to-level').textContent = Math.max(0, pointsForNextLevel - state.points);
 }
 
+function recordAdventureWin() {
+    const wins = Number(localStorage.getItem('teachmath_adventure_wins') || '0') + 1;
+    localStorage.setItem('teachmath_adventure_wins', String(wins));
+    state.completedAdventures = wins;
+    checkAchievements();
+    saveState();
+}
+
 // Play Sound (optional, can be disabled)
 function playSound(type) {
     // Optional: Add sound effects here
@@ -1621,6 +1662,8 @@ function syncWeeklyProgress() {
 // Save State
 function saveState() {
     // Convert Set to Array for JSON
+    state.completedAdventures = Number(localStorage.getItem('teachmath_adventure_wins') || state.completedAdventures || '0');
+
     const saveData = {
         ...state,
         triedTopics: Array.from(state.triedTopics || [])
@@ -1670,6 +1713,12 @@ function loadState() {
         }
         if (!state.weeklyProgressWeek) {
             state.weeklyProgressWeek = '';
+        }
+        if (!state.completedAdventures) {
+            state.completedAdventures = Number(localStorage.getItem('teachmath_adventure_wins') || '0');
+        }
+        if (!state.cleanRunStreak) {
+            state.cleanRunStreak = 0;
         }
 
         if (resetLegacyBossChampion) {

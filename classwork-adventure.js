@@ -1,3 +1,9 @@
+window.recordAdventureWin = function recordAdventureWin() {
+    const key = 'teachmath_adventure_wins';
+    const value = Number(localStorage.getItem(key) || '0') + 1;
+    localStorage.setItem(key, String(value));
+};
+
 const rooms = [
     {
         icon: '🧮',
@@ -259,6 +265,9 @@ function advanceRoom() {
     currentRoom++;
     byId('answer-input').disabled = false;
     if (currentRoom >= rooms.length) {
+        if (typeof window !== 'undefined' && typeof window.recordAdventureWin === 'function') {
+            window.recordAdventureWin();
+        }
         byId('game-screen').classList.add('hidden');
         byId('win-screen').classList.remove('hidden');
         return;

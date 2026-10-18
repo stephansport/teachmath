@@ -1,3 +1,9 @@
+window.recordAdventureWin = function recordAdventureWin() {
+    const key = 'teachmath_adventure_wins';
+    const value = Number(localStorage.getItem(key) || '0') + 1;
+    localStorage.setItem(key, String(value));
+};
+
 // TeachMath Adventure – UI Controller
 
 const ui = {
@@ -204,6 +210,9 @@ const ui = {
 
     // --- Gewonnen ---
     winGame() {
+        if (typeof window !== 'undefined' && typeof window.recordAdventureWin === 'function') {
+            window.recordAdventureWin();
+        }
         const score = adventure.state.score;
         document.getElementById('win-score').textContent = score;
         document.getElementById('win-text').textContent =
