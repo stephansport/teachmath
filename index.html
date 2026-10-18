@@ -173,6 +173,13 @@
                     <div class="topic-progress" style="background: #0891b2; color: #fff;">Zusätzliche Übung</div>
                 </div>
 
+                <div class="topic-card" id="forest-adventure-card" style="border: 3px solid #78d4a8; background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); cursor: pointer;">
+                    <div class="topic-icon">🌿</div>
+                    <h3 style="color: #14532d;">Wald-Abenteuer</h3>
+                    <p style="color: #166534;">Ein ruhiges, originales Tal-Abenteuer mit klugem Helfen und leisen Rätseln.</p>
+                    <div class="topic-progress" style="background: #22c55e; color: #052e16;">Das Rätsel der Bachglocke</div>
+                </div>
+
                 <div class="topic-card" id="classwork-adventure-card" style="border: 3px solid #7c3aed; background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%); cursor: pointer;">
                     <div class="topic-icon">🗝️</div>
                     <h3>Abenteuer Klassenarbeits-Schloss</h3>
@@ -301,6 +308,9 @@
         // Adventure-Karte verlinken
         document.getElementById('adventure-card').addEventListener('click', () => {
             window.location.href = 'adventure.html';
+        });
+        document.getElementById('forest-adventure-card').addEventListener('click', () => {
+            window.location.href = 'forest-adventure.html';
         });
         document.getElementById('classwork-adventure-card').addEventListener('click', () => {
             window.location.href = 'classwork-adventure.html';
